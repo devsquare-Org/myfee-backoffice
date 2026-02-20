@@ -5,18 +5,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// 클라이언트에서 쿠키의 userId 가져오기
-export function getUserIdClient(): string | null {
-  if (typeof document === "undefined") return null;
-
-  const cookies = document.cookie.split(";");
-  const userIdCookie = cookies.find((cookie) =>
-    cookie.trim().startsWith("userId="),
-  );
-
-  if (userIdCookie) {
-    return userIdCookie.split("=")[1];
+export function parseJwt(token: string) {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const json = atob(base64);
+    return JSON.parse(json);
+  } catch {
+    return null;
   }
-
-  return null;
 }
