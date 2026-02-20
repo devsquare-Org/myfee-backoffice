@@ -6,7 +6,7 @@ import {
   rejectChallengeReviewParams,
 } from "@/app/(private)/challenge-review/_action/req-schema";
 import { getUserIdServer } from "@/lib/server-utils";
-import { actionClient } from "@/lib/utils";
+import { actionClient } from "@/lib/safe-action";
 import wipManager from "@/module/wip-manager";
 
 export const approveChallengeReviewAction = actionClient

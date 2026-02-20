@@ -1,30 +1,33 @@
 "use server";
 
-import { loginFormSchema } from "@/app/signin/_action/schema";
-import { actionClient } from "@/lib/utils";
+import { loginFormSchema, returnSchema } from "@/app/signin/_action/schema";
+import { myfeeFetch } from "@/lib/myfee-client";
+import { actionClient } from "@/lib/safe-action";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-const dummyAccessToken = "1234567890";
-
 export const loginAction = actionClient
   .inputSchema(loginFormSchema)
+  .outputSchema(returnSchema)
   .action(async ({ parsedInput }) => {
-    console.log(parsedInput);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const res = await myfeeFetch({
+      endpoint: `/api/admin/auth/login?email=${parsedInput.email}&password=${parsedInput.password}`,
+    });
 
     const cookieStore = await cookies();
-    cookieStore.set("accessToken", dummyAccessToken);
-    cookieStore.set("userId", parsedInput.email);
+    cookieStore.set("accessToken", res.accessToken);
+    cookieStore.set("refreshToken", res.refreshToken);
 
-    // throw new Error("Login Failed");
-    return { message: "Login Success" };
+    return {
+      data: res,
+      status: "SUCCESS",
+      message: "",
+    };
   });
 
 export const logoutAction = actionClient.action(async () => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   const cookieStore = await cookies();
   cookieStore.delete("accessToken");
-  cookieStore.delete("userId");
+  cookieStore.delete("refreshToken");
   redirect("/signin");
 });

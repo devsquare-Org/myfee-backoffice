@@ -1,7 +1,7 @@
 "use server";
 
 import { updateUserPointParams } from "@/app/(private)/users/_action/req-schema";
-import { actionClient } from "@/lib/utils";
+import { actionClient } from "@/lib/safe-action";
 
 export const updateUserPointAction = actionClient
   .inputSchema(updateUserPointParams)

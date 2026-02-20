@@ -6,7 +6,7 @@ import {
   changeOrderParams,
   deleteBannerParams,
 } from "@/app/(private)/banner/_action/req-schema";
-import { actionClient } from "@/lib/utils";
+import { actionClient } from "@/lib/safe-action";
 import { redirect } from "next/navigation";
 
 export const changeOrderAction = actionClient
