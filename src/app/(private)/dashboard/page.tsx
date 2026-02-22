@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/page-header";
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { Dashboard } from "@/app/(private)/dashboard/_components/dashboard";
+import { redirect } from "next/navigation";
 
 type Props = {
   searchParams: Promise<{
@@ -10,8 +11,21 @@ type Props = {
   }>;
 };
 
-export default async function Home({ searchParams }: Props) {
-  const { startDate, endDate } = await searchParams;
+export default async function Page({ searchParams }: Props) {
+  const params = await searchParams;
+
+  if (!params.startDate || !params.endDate) {
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+
+    const endDate = params.endDate ?? today.toISOString().split("T")[0];
+    const startDate =
+      params.startDate ?? thirtyDaysAgo.toISOString().split("T")[0];
+
+    redirect(`/dashboard?startDate=${startDate}&endDate=${endDate}`);
+  }
+
   return (
     <div>
       <PageHeader
@@ -25,7 +39,7 @@ export default async function Home({ searchParams }: Props) {
           </div>
         }
       >
-        <Dashboard startDate={startDate} endDate={endDate} />
+        <Dashboard startDate={params.startDate} endDate={params.endDate} />
       </Suspense>
     </div>
   );

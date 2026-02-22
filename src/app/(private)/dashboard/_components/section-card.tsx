@@ -36,7 +36,7 @@ export function SectionCards({
           </Tooltip>
         </div>
         <p className='text-xl font-bold tabular-nums mb-2'>
-          {userCount.toLocaleString()}명
+          {userCount ? userCount.toLocaleString() : 0}명
         </p>
         <p className='text-xs text-muted-foreground font-bold'>
           조회한 기간 누적 가입자 수
@@ -56,7 +56,7 @@ export function SectionCards({
           </Tooltip>
         </div>
         <p className='text-xl font-bold tabular-nums mb-2'>
-          {pointCount.toLocaleString()}원
+          {pointCount ? pointCount.toLocaleString() : 0}원
         </p>
         <p className='text-xs text-muted-foreground font-bold'>
           조회한 기간 누적 지급된 포인트
@@ -76,7 +76,7 @@ export function SectionCards({
           </Tooltip>
         </div>
         <p className='text-xl font-bold tabular-nums mb-2'>
-          {postCount.toLocaleString()}개
+          {postCount ? postCount.toLocaleString() : 0}개
         </p>
         <p className='text-xs text-muted-foreground font-bold'>
           조회한 기간 누적 게시글 수
@@ -96,7 +96,7 @@ export function SectionCards({
           </Tooltip>
         </div>
         <p className='text-xl font-bold tabular-nums mb-2'>
-          {challengeReviewCount.toLocaleString()}개
+          {challengeReviewCount ? challengeReviewCount.toLocaleString() : 0}개
         </p>
         <p className='text-xs text-muted-foreground font-bold'>
           조회한 기간 누적 챌린지 인증 수

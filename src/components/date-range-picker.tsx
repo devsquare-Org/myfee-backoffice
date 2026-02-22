@@ -109,8 +109,8 @@ export function DateRangePicker({
   function handleClear() {
     setDateRange(undefined);
     const params = new URLSearchParams(searchParams.toString());
-    params.delete("startDate");
-    params.delete("endDate");
+    params.set("startDate", format(new Date(), "yyyy-MM-dd"));
+    params.set("endDate", format(new Date(), "yyyy-MM-dd"));
     if (params.has("page")) params.set("page", "1");
     if (params.has("reviewItemId")) params.delete("reviewItemId");
     router.push(`?${params.toString()}`, { scroll: false });
@@ -175,15 +175,15 @@ export function DateRangePicker({
                   <div className="text-xs text-muted-foreground">
                     {tempDateRange?.from && tempDateRange?.to
                       ? `${format(tempDateRange.from, "yyyy.MM.dd", {
-                          locale: ko,
-                        })} - ${format(tempDateRange.to, "yyyy.MM.dd", {
-                          locale: ko,
-                        })}`
+                        locale: ko,
+                      })} - ${format(tempDateRange.to, "yyyy.MM.dd", {
+                        locale: ko,
+                      })}`
                       : tempDateRange?.from
-                      ? `${format(tempDateRange.from, "yyyy.MM.dd", {
+                        ? `${format(tempDateRange.from, "yyyy.MM.dd", {
                           locale: ko,
                         })} - 종료일 선택`
-                      : "날짜를 선택하세요"}
+                        : "날짜를 선택하세요"}
                   </div>
                   {tempDateRange?.from && (
                     <Button
@@ -228,7 +228,7 @@ export function DateRangePicker({
             size="sm"
             onClick={handleClear}
           >
-            전체 기간
+            최근 30일
           </Button>
         )}
       </div>
