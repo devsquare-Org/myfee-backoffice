@@ -45,7 +45,11 @@ export default function NotificationHistory({
                 <TableCell>{notification.aliasName}</TableCell>
                 <TableCell>{notification.title}</TableCell>
                 <TableCell>{notification.body}</TableCell>
-                <TableCell>{notification.sendDt}</TableCell>
+                <TableCell>
+                  {notification.sendDt.split("T")[0] +
+                    " " +
+                    notification.sendDt.split("T")[1]}
+                </TableCell>
                 <TableCell>
                   <Badge
                     variant={
