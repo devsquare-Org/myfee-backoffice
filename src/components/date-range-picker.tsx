@@ -83,7 +83,7 @@ export function DateRangePicker({
       const params = new URLSearchParams(searchParams.toString());
       params.set("startDate", format(tempDateRange.from, "yyyy-MM-dd"));
       params.set("endDate", format(tempDateRange.to, "yyyy-MM-dd"));
-      if (params.has("page")) params.set("page", "1");
+      if (params.has("page")) params.set("page", "0");
       if (params.has("reviewItemId")) params.delete("reviewItemId");
       router.push(`?${params.toString()}`, { scroll: false });
     } else {
@@ -111,7 +111,7 @@ export function DateRangePicker({
     const params = new URLSearchParams(searchParams.toString());
     params.set("startDate", format(new Date(), "yyyy-MM-dd"));
     params.set("endDate", format(new Date(), "yyyy-MM-dd"));
-    if (params.has("page")) params.set("page", "1");
+    if (params.has("page")) params.set("page", "0");
     if (params.has("reviewItemId")) params.delete("reviewItemId");
     router.push(`?${params.toString()}`, { scroll: false });
   }

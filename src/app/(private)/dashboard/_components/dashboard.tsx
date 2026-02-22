@@ -15,13 +15,13 @@ type Props = {
 };
 
 export async function Dashboard({ startDate, endDate }: Props) {
-  const dashboardData = await fetchDashboardData({
+  const { data } = await fetchDashboardData({
     startDate,
     endDate,
   });
 
   const { postCount, challengeReviewCount, pointCount, userList, userCount } =
-    dashboardData.data;
+    data;
 
   return (
     <div>
@@ -48,7 +48,7 @@ export async function Dashboard({ startDate, endDate }: Props) {
         조회한 기간에 가입한 유저 목록입니다.
       </p>
       <div className='border rounded-2xl p-6'>
-        <UserList userList={userList} />
+        <UserList userListData={userList} />
       </div>
     </div>
   );

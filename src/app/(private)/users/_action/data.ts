@@ -5,108 +5,42 @@ import {
   userDetailParams,
   userListParams,
   userPointHistoryParams,
-} from "@/app/(private)/users/_action/req-schema";
+} from "@/app/(private)/users/_action/schema";
 import {
-  userChallengeHistoryResponse,
-  userDetailResponse,
-  userListResponse,
-  userPointHistoryResponse,
-} from "@/app/(private)/users/_action/res-schema";
+  UserChallengeHistoryResponse,
+  UserDetailResponse,
+  UserListResponse,
+  UserPointHistoryResponse,
+} from "@/app/(private)/users/_action/type";
+import { myfeeFetch } from "@/lib/myfee-client";
+
 import { z } from "zod";
 
 export async function fetchUserList(
-  params: z.infer<typeof userListParams>
+  params: z.infer<typeof userListParams>,
 ): Promise<{
-  data: z.infer<typeof userListResponse>;
+  data: UserListResponse;
   message: string;
 }> {
-  console.log(">>>>>>>>>>>", decodeURIComponent(params.search || ""));
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const searchParams = new URLSearchParams();
+  searchParams.set("page", params.page);
+  searchParams.set("size", "10");
 
-  const data = [
-    {
-      id: "1",
-      name: "홍길동1",
-      nickname: "hong1231",
-      email: "hong@gmail.com",
-      image: "https://via.placeholder.com/150",
-      createdAt: "2025-01-01 12:00:00",
-      phone: "010-1234-5678",
-    },
-    {
-      id: "2",
-      name: "김철수2",
-      nickname: "kim1232",
-      email: "hong@gmail.com",
-      image: "https://via.placeholder.com/150",
-      createdAt: "2025-01-01 12:00:00",
-      phone: "010-1234-5678",
-    },
-    {
-      id: "3",
-      name: "박영희3",
-      nickname: "park1233",
-      email: "hong@gmail.com",
-      image: "https://via.placeholder.com/150",
-      createdAt: "2025-01-01 12:00:00",
-      phone: "010-1234-5678",
-    },
-    {
-      id: "4",
-      name: "이영수4",
-      nickname: "lee1234",
-      email: "hong@gmail.com",
-      image: "https://via.placeholder.com/150",
-      createdAt: "2025-01-01 12:00:00",
-      phone: "010-1234-5678",
-    },
-    {
-      id: "5",
-      name: "김민수5",
-      nickname: "kim1235",
-      email: "hong@gmail.com",
-      image: "https://via.placeholder.com/150",
-      createdAt: "2025-01-01 12:00:00",
-      phone: "010-1234-5678",
-    },
-    {
-      id: "6",
-      name: "최지훈6",
-      nickname: "choi1236",
-      email: "hong@gmail.com",
-      image: "https://via.placeholder.com/150",
-      createdAt: "2025-01-01 12:00:00",
-      phone: "010-1234-5678",
-    },
-    {
-      id: "7",
-      name: "김지현7",
-      nickname: "kim1237",
-      email: "hong@gmail.com",
-      image: "https://via.placeholder.com/150",
-      createdAt: "2025-01-01 12:00:00",
-      phone: "010-1234-5678",
-    },
-    {
-      id: "8",
-      name: "이지현8",
-      nickname: "lee1238",
-      email: "hong@gmail.com",
-      image: "https://via.placeholder.com/150",
-      createdAt: "2025-01-01 12:00:00",
-      phone: "010-1234-5678",
-    },
-  ];
+  if (params.search && params.search.length > 0)
+    searchParams.set("keyword", params.search);
 
-  // console.log(params, data);
+  const membersRes = await myfeeFetch({
+    endpoint: `/api/admin/members?${searchParams.toString()}`,
+    requiresAuth: true,
+  });
 
-  return { data, message: "success" };
+  return { data: membersRes, message: "" };
 }
 
 export async function fetchUserDetail(
-  params: z.infer<typeof userDetailParams>
+  params: z.infer<typeof userDetailParams>,
 ): Promise<{
-  data: z.infer<typeof userDetailResponse>;
+  data: UserDetailResponse;
   message: string;
 }> {
   const userDetail = {
@@ -125,9 +59,9 @@ export async function fetchUserDetail(
 }
 
 export async function fetchUserPointHistory(
-  params: z.infer<typeof userPointHistoryParams>
+  params: z.infer<typeof userPointHistoryParams>,
 ): Promise<{
-  data: z.infer<typeof userPointHistoryResponse>;
+  data: UserPointHistoryResponse;
   message: string;
 }> {
   await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -177,9 +111,9 @@ export async function fetchUserPointHistory(
 }
 
 export async function fetchUserChallengeHistory(
-  params: z.infer<typeof userChallengeHistoryParams>
+  params: z.infer<typeof userChallengeHistoryParams>,
 ): Promise<{
-  data: z.infer<typeof userChallengeHistoryResponse>;
+  data: UserChallengeHistoryResponse;
   message: string;
 }> {
   await new Promise((resolve) => setTimeout(resolve, 3000));

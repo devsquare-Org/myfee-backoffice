@@ -1,6 +1,6 @@
 "use server";
 
-import { dashboardDataParams } from "@/app/(private)/dashboard/_action/req-schema";
+import { dashboardDataParams } from "@/app/(private)/dashboard/_action/schema";
 import { DashboardDataResponse } from "@/app/(private)/dashboard/_action/type";
 
 import { myfeeFetch } from "@/lib/myfee-client";
@@ -29,7 +29,7 @@ export async function fetchDashboardData(
     challengeReviewCount: statisticsRes.challengeRecordCount,
     userCount: statisticsRes.memberCount,
     pointCount: statisticsRes.pointCount,
-    userList: membersRes.contents ?? [],
+    userList: membersRes,
   } as DashboardDataResponse;
 
   return {

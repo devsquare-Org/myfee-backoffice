@@ -16,7 +16,6 @@ export default function PaginationWrapper({
     <>
       {length > 10 ? (
         <PaginationControls
-          page={page}
           pageSize={pageSize}
           totalItems={totalItems}
         />

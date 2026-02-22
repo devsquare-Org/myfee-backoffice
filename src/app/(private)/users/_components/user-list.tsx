@@ -1,4 +1,4 @@
-import { DashboardDataResponse } from '@/app/(private)/dashboard/_action/type';
+import { UserListResponse } from '@/app/(private)/users/_action/type';
 import { PaginationControls } from '@/components/pagination-controls';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
@@ -16,17 +16,19 @@ type Props = {
   startDate?: string;
   endDate?: string;
   search?: string;
-  userList: DashboardDataResponse["userList"] | [];
+  page?: number;
+  userListData: UserListResponse;
   isPaging?: boolean;
 };
 
 export function UserList({
-  userList,
+  userListData,
   search,
   startDate,
   endDate,
   isPaging,
 }: Props) {
+  const { contents, totalElements, totalPages, size } = userListData;
   return (
     <>
       <Table className='text-xs'>
@@ -46,7 +48,7 @@ export function UserList({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {userList.map((user) => (
+          {contents.map((user) => (
             <TableRow key={user.id} url={`${ROUTES.USERS}/${user.id}`}>
               <TableCell>
                 <Avatar>
@@ -68,11 +70,10 @@ export function UserList({
           ))}
         </TableBody>
       </Table>
-      {userList.length && isPaging && (
+      {contents.length > 0 && totalPages > 1 && isPaging && (
         <PaginationControls
-          page={1}
-          pageSize={10}
-          totalItems={100}
+          pageSize={size}
+          totalItems={totalElements}
           searchParams={{ search, startDate, endDate }}
         />
       )}

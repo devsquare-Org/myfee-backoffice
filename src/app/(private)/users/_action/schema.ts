@@ -1,9 +1,7 @@
 import * as z from "zod";
 
 export const userListParams = z.object({
-  startDate: z.string().optional(),
-  endDate: z.string().optional(),
-  page: z.string().optional(),
+  page: z.string(),
   search: z.string().optional(),
 });
 

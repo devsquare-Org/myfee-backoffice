@@ -3,6 +3,7 @@ import { UserList } from "@/app/(private)/users/_components/user-list";
 import { PageHeader } from "@/components/page-header";
 import SearchInput from "@/components/search-input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 type Props = {
@@ -14,9 +15,26 @@ type Props = {
   }>;
 };
 
-export default async function UserPage({ searchParams }: Props) {
-  const { startDate, endDate, search, page } = await searchParams;
-  const { data } = await fetchUserList({ startDate, endDate, page, search });
+export default async function Page({ searchParams }: Props) {
+  const params = await searchParams;
+
+  if (!params.page) {
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+
+    const page = params.page ?? "0";
+    const search = params.search ?? "";
+
+    const queryString = new URLSearchParams();
+    queryString.set("page", page);
+    if (search) queryString.set("search", search);
+
+    redirect(`/users?${queryString.toString()}`);
+  }
+
+  const { page, search } = params;
+  const { data } = await fetchUserList({ page, search });
 
   return (
     <div>
@@ -32,10 +50,9 @@ export default async function UserPage({ searchParams }: Props) {
         />
       </Suspense>
       <UserList
-        userList={data}
+        userListData={data}
         search={search}
-        startDate={startDate}
-        endDate={endDate}
+        page={Number(page)}
         isPaging={true}
       />
     </div>

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import CustomFormLabel from "@/components/custom-form-label";
 import { useEffect, useRef, useState } from "react";
-import { updateUserPointParams } from "@/app/(private)/users/_action/req-schema";
+import { updateUserPointParams } from "@/app/(private)/users/_action/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useForm } from "react-hook-form";

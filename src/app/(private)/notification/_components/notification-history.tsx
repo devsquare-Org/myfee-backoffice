@@ -61,7 +61,6 @@ export default function NotificationHistory({
         </Table>
       )}
       <PaginationControls
-        page={1}
         pageSize={10}
         totalItems={100}
         searchParams={{ startDate, endDate }}

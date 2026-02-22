@@ -29,7 +29,7 @@ export default function StatusSelector({ className }: { className?: string }) {
 
     params.set("status", value);
 
-    if (params.has("page")) params.set("page", "1");
+    if (params.has("page")) params.set("page", "0");
 
     if (params.has("reviewItemId")) params.delete("reviewItemId");
 

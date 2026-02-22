@@ -23,7 +23,11 @@ export default async function Page({ searchParams }: Props) {
     const startDate =
       params.startDate ?? thirtyDaysAgo.toISOString().split("T")[0];
 
-    redirect(`/dashboard?startDate=${startDate}&endDate=${endDate}`);
+    const queryString = new URLSearchParams();
+    queryString.set("startDate", startDate);
+    queryString.set("endDate", endDate);
+
+    redirect(`/dashboard?${queryString.toString()}`);
   }
 
   return (

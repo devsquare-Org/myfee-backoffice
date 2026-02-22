@@ -60,7 +60,7 @@ export default function SearchInput({
     else params.delete(searchParamsName);
 
     if (params.has("page")) {
-      params.set("page", "1");
+      params.set("page", "0");
     }
 
     replace(`${pathname}?${params.toString()}`);
@@ -72,7 +72,7 @@ export default function SearchInput({
     params.delete(searchParamsName);
 
     if (params.has("page")) {
-      params.set("page", "1");
+      params.set("page", "0");
     }
 
     // URL 변경만 (캐시 무효화는 useEffect에서)
