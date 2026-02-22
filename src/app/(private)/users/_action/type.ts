@@ -19,13 +19,19 @@ export type UserListResponse = {
 };
 
 export type UserDetailResponse = {
-  nickname: string;
+  id: number;
+  joinDt: string;
   name: string;
-  phone: string;
-  email: string;
-  shopbyUserId: string;
+  mobile: string;
+  birth: string;
+  gender: string;
+  pointBalance: number;
+  totalFollower: number;
+  totalFollowing: number;
+  totalFeed: number;
+  alias: string;
+  profileImageUrl: string | null;
 };
-
 export type UserPointHistoryResponse = {
   id: string;
   point: number;

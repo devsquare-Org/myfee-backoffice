@@ -49,7 +49,7 @@ export function UserList({
         </TableHeader>
         <TableBody>
           {contents.map((user) => (
-            <TableRow key={user.id} url={`${ROUTES.USERS}/${user.id}`}>
+            <TableRow key={user.id} url={`${ROUTES.USERS}/${user.alias}`}>
               <TableCell>
                 <Avatar>
                   <AvatarImage src={user.profileImageUrl ?? ""} />

@@ -43,17 +43,12 @@ export async function fetchUserDetail(
   data: UserDetailResponse;
   message: string;
 }> {
-  const userDetail = {
-    nickname: "nickname",
-    name: "name",
-    phone: "01012345678",
-    email: "sole@lifeb.kr",
-    shopbyUserId: "122700946",
-  };
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
+  const membersRes = await myfeeFetch({
+    endpoint: `/api/admin/members?page=0&size=1&keyword=${params.userAlias}`,
+    requiresAuth: true,
+  });
   return {
-    data: userDetail,
+    data: membersRes.contents[0],
     message: "유저 상세 정보를 성공적으로 조회하였습니다.",
   };
 }

@@ -6,7 +6,7 @@ export const userListParams = z.object({
 });
 
 export const userDetailParams = z.object({
-  userId: z.string(),
+  userAlias: z.string(),
 });
 
 export const updateUserPointParams = z.object({

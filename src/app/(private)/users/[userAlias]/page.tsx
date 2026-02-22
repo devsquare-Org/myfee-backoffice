@@ -13,18 +13,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type Props = {
   params: Promise<{
-    userId: string;
+    userAlias: string;
   }>;
 };
 
 export default async function UserListPage({ params }: Props) {
-  const { userId } = await params;
+  const { userAlias } = await params;
 
   async function fetchData() {
     const [userDetail, pointHistory, challengeHistory] = await Promise.all([
-      fetchUserDetail({ userId }),
-      fetchUserPointHistory({ userId }),
-      fetchUserChallengeHistory({ userId }),
+      fetchUserDetail({ userAlias }),
+      fetchUserPointHistory({ userId: "1" }),
+      fetchUserChallengeHistory({ userId: "1" }),
     ]);
 
     return { userDetail, pointHistory, challengeHistory };
@@ -47,12 +47,7 @@ export default async function UserListPage({ params }: Props) {
         </TabsList>
         <TabsContent value="detail">
           <BasicInfo
-            email={userDetail.data.email}
-            name={userDetail.data.name}
-            nickname={userDetail.data.nickname}
-            phone={userDetail.data.phone}
-            point={15000}
-            shopbyUserId={userDetail.data.shopbyUserId}
+            userDetail={userDetail.data}
           />
         </TabsContent>
         <TabsContent value="point-manage">
