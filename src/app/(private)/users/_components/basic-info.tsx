@@ -23,7 +23,7 @@ export default function BasicInfo({ userDetail }: Props) {
       <Card className="col-span-3 max-w-xl">
         <Label className="mb-2">이름</Label>
         <div className="flex items-center gap-2 mb-6">
-          <Input value={userDetail.name} readOnly />
+          <Input value={userDetail.name ?? ""} readOnly />
           <button
             type="button"
             onClick={() => copyToClipboard(userDetail.name)}
@@ -35,7 +35,7 @@ export default function BasicInfo({ userDetail }: Props) {
 
         <Label className="mb-2">닉네임</Label>
         <div className="flex items-center gap-2 mb-6">
-          <Input value={userDetail.alias} readOnly />
+          <Input value={userDetail.alias ?? ""} readOnly />
           <button
             type="button"
             onClick={() => copyToClipboard(userDetail.alias)}
@@ -47,7 +47,7 @@ export default function BasicInfo({ userDetail }: Props) {
 
         <Label className="mb-2">전화번호</Label>
         <div className="flex items-center gap-2 mb-6">
-          <Input value={userDetail.mobile} readOnly />
+          <Input value={userDetail.mobile ?? ""} readOnly />
           <button
             onClick={() => copyToClipboard(userDetail.mobile)}
             className="border p-1 rounded-md h-9 w-9 flex items-center justify-center cursor-pointer hover:bg-secondary dark:bg-input/30"
@@ -58,49 +58,61 @@ export default function BasicInfo({ userDetail }: Props) {
 
         <Label className="mb-2">가입일</Label>
         <div className="flex items-center gap-2 mb-6">
-          <Input value={userDetail.joinDt.split("T")[0]} readOnly />
+          <Input value={userDetail.joinDt?.split("T")[0] ?? ""} readOnly />
           <div className="w-9 h-9" />
         </div>
 
         <Label className="mb-2">생년월일</Label>
         <div className="flex items-center gap-2 mb-6">
-          <Input value={userDetail.birth} readOnly />
+          <Input value={userDetail.birth ?? ""} readOnly />
           <div className="w-9 h-9" />
         </div>
 
         <Label className="mb-2">성별</Label>
         <div className="flex items-center gap-2 mb-6">
-          <Input value={userDetail.gender} readOnly />
+          <Input value={userDetail.gender ?? ""} readOnly />
           <div className="w-9 h-9" />
         </div>
 
         <Label className="mb-2">보유 포인트</Label>
         <div className="flex items-center gap-2  mb-6">
-          <Input value={userDetail.pointBalance.toLocaleString()} readOnly />
+          <Input
+            value={userDetail.pointBalance?.toLocaleString() ?? ""}
+            readOnly
+          />
           <div className="w-9 h-9" />
         </div>
 
         <Label className="mb-2">팔로워</Label>
         <div className="flex items-center gap-2  mb-6">
-          <Input value={userDetail.totalFollower.toLocaleString()} readOnly />
+          <Input
+            value={userDetail.totalFollower?.toLocaleString() ?? ""}
+            readOnly
+          />
           <div className="w-9 h-9" />
         </div>
 
         <Label className="mb-2">팔로잉</Label>
         <div className="flex items-center gap-2  mb-6">
-          <Input value={userDetail.totalFollowing.toLocaleString()} readOnly />
+          <Input
+            value={userDetail.totalFollowing?.toLocaleString() ?? ""}
+            readOnly
+          />
           <div className="w-9 h-9" />
         </div>
 
         <Label className="mb-2">게시물</Label>
         <div className="flex items-center gap-2  mb-6">
-          <Input value={userDetail.totalFeed.toLocaleString()} readOnly />
+          <Input
+            value={userDetail.totalFeed?.toLocaleString() ?? ""}
+            readOnly
+          />
           <div className="w-9 h-9" />
         </div>
 
         <Label className="mb-2">쇼핑몰 아이디</Label>
         <div className="flex items-center gap-2">
-          <Input value={userDetail.id} readOnly />
+          <Input value={userDetail.id ?? ""} readOnly />
 
           <button
             type="button"

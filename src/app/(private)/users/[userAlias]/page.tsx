@@ -46,12 +46,10 @@ export default async function UserListPage({ params }: Props) {
           <TabsTrigger value="challenge">챌린지 내역</TabsTrigger>
         </TabsList>
         <TabsContent value="detail">
-          <BasicInfo
-            userDetail={userDetail.data}
-          />
+          <BasicInfo userDetail={userDetail.data} />
         </TabsContent>
         <TabsContent value="point-manage">
-          <UpdatePointForm />
+          <UpdatePointForm userId={userDetail.data.id.toString()} />
         </TabsContent>
         <TabsContent value="point">
           <Point pointHistory={pointHistory.data} />

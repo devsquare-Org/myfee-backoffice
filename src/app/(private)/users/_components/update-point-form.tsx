@@ -25,7 +25,7 @@ import { Card } from "@/components/ui/card";
 import PointDialog from "@/app/(private)/users/_components/point-dialog";
 
 type Props = {
-  userId?: string;
+  userId: string;
   className?: string;
 };
 export default function UpdatePointForm({ className, userId }: Props) {
@@ -46,7 +46,7 @@ export default function UpdatePointForm({ className, userId }: Props) {
     resolver: zodResolver(updateUserPointParams),
     mode: "onChange",
     defaultValues: {
-      userId: userId || "",
+      userId: userId,
       reason: "",
       points: undefined,
       type: undefined,

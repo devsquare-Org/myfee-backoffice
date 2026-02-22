@@ -17,7 +17,7 @@ import { myfeeFetch } from "@/lib/myfee-client";
 import { z } from "zod";
 
 export async function fetchUserList(
-  params: z.infer<typeof userListParams>,
+  params: z.infer<typeof userListParams>
 ): Promise<{
   data: UserListResponse;
   message: string;
@@ -38,7 +38,7 @@ export async function fetchUserList(
 }
 
 export async function fetchUserDetail(
-  params: z.infer<typeof userDetailParams>,
+  params: z.infer<typeof userDetailParams>
 ): Promise<{
   data: UserDetailResponse;
   message: string;
@@ -54,7 +54,7 @@ export async function fetchUserDetail(
 }
 
 export async function fetchUserPointHistory(
-  params: z.infer<typeof userPointHistoryParams>,
+  params: z.infer<typeof userPointHistoryParams>
 ): Promise<{
   data: UserPointHistoryResponse;
   message: string;
@@ -106,7 +106,7 @@ export async function fetchUserPointHistory(
 }
 
 export async function fetchUserChallengeHistory(
-  params: z.infer<typeof userChallengeHistoryParams>,
+  params: z.infer<typeof userChallengeHistoryParams>
 ): Promise<{
   data: UserChallengeHistoryResponse;
   message: string;

@@ -1,5 +1,5 @@
-'use client';
-import { Badge } from '@/components/ui/badge';
+"use client";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
 type Props = {
   pointHistory: {
@@ -22,7 +22,7 @@ type Props = {
 
 export default function Point({ pointHistory }: Props) {
   return (
-    <Table className='text-xs'>
+    <Table className="text-xs">
       <TableHeader>
         <TableRow>
           <TableHead>유형</TableHead>
@@ -36,17 +36,17 @@ export default function Point({ pointHistory }: Props) {
         {pointHistory.map((item) => (
           <TableRow key={item.id}>
             <TableCell>
-              {item.type === '지급' ? (
+              {item.type === "지급" ? (
                 <Badge
-                  variant='outline'
-                  className='text-amber-500 border-amber-500'
+                  variant="outline"
+                  className="text-amber-500 border-amber-500"
                 >
                   지급
                 </Badge>
               ) : (
                 <Badge
-                  variant='outline'
-                  className='border-teal-500 text-teal-500'
+                  variant="outline"
+                  className="border-teal-500 text-teal-500"
                 >
                   차감
                 </Badge>
@@ -54,7 +54,7 @@ export default function Point({ pointHistory }: Props) {
             </TableCell>
             <TableCell>{item.point.toLocaleString()}</TableCell>
             <TableCell>{item.reason}</TableCell>
-            <TableCell>{item.adminId || 'system'}</TableCell>
+            <TableCell>{item.adminId || "system"}</TableCell>
             <TableCell>{item.createdAt}</TableCell>
           </TableRow>
         ))}
