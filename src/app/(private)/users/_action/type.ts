@@ -53,9 +53,17 @@ export type UserPointHistoryResponse = {
 }[];
 
 export type UserChallengeHistoryResponse = {
-  id: string;
-  name: string;
-  reviewCount: number;
-  result: string;
-  createdAt: string;
+  challengeId: number;
+  title: string;
+  cycle: number;
+  joinDt: string;
+  endDate: string;
+  currentCount: number;
+  joinStatus:
+    | "MID_REVIEWING"
+    | "IN_PROGRESS"
+    | "FINAL_REVIEWING"
+    | "COMPLETED"
+    | "FAILED"
+    | "TERMINATED";
 }[];

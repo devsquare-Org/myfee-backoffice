@@ -76,34 +76,23 @@ export async function fetchUserChallengeHistory(
   data: UserChallengeHistoryResponse;
   message: string;
 }> {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  const res = await myfeeFetch({
+    endpoint: `/api/admin/members/${params.userId}/challenges`,
+    requiresAuth: true,
+  });
 
-  const challengeHistory = [
-    {
-      id: "1",
-      name: "10월 챌린지",
-      reviewCount: 15,
-      result: "성공",
-      createdAt: "2023-10-05 12:00:00",
-    },
-    {
-      id: "2",
-      name: "9월 챌린지",
-      reviewCount: 8,
-      result: "실패",
-      createdAt: "2023-09-30 12:00:00",
-    },
-    {
-      id: "3",
-      name: "8월 챌린지",
-      reviewCount: 12,
-      result: "성공",
-      createdAt: "2023-10-03 12:00:00",
-    },
-  ];
+  const data = res.map((item: Record<string, string | number>) => ({
+    challengeId: item.challengeId,
+    title: item.title,
+    cycle: item.cycle,
+    joinDt: item.joinDt,
+    endDate: item.endDate,
+    currentCount: item.currentCount,
+    joinStatus: item.joinStatus,
+  }));
 
   return {
-    data: challengeHistory,
+    data,
     message: "챌린지 내역을 성공적으로 조회하였습니다.",
   };
 }
