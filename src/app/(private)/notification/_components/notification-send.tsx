@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import CustomFormLabel from "@/components/custom-form-label";
 import { Card } from "@/components/ui/card";
-import { sendNotificationParams } from "@/app/(private)/notification/_action/req-schema";
+import { sendNotificationParams } from "@/app/(private)/notification/_action/schema";
 
 export default function NotificationSend() {
   const [isSubmit, setIsSubmit] = useState(false);

@@ -1,6 +1,6 @@
 "use client";
 
-import { notificationHistoryResponse } from "@/app/(private)/notification/_action/res-schema";
+import { NotificationHistoryResponse } from "@/app/(private)/notification/_action/type";
 import { CustomAlert } from "@/components/custom-alert";
 import {
   Table,
@@ -10,12 +10,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import * as z from "zod";
 import { Badge } from "@/components/ui/badge";
 import { PaginationControls } from "@/components/pagination-controls";
 
 type Props = {
-  notificationHistory: z.infer<typeof notificationHistoryResponse>;
+  notificationHistory: NotificationHistoryResponse;
   startDate?: string;
   endDate?: string;
 };
@@ -27,7 +26,7 @@ export default function NotificationHistory({
 }: Props) {
   return (
     <div>
-      {notificationHistory.length === 0 ? (
+      {notificationHistory.contents.length === 0 ? (
         <CustomAlert type="simple" title="발송 내역이 없습니다." />
       ) : (
         <Table className="text-xs">
@@ -41,18 +40,20 @@ export default function NotificationHistory({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {notificationHistory.map((notification) => (
+            {notificationHistory.contents.map((notification) => (
               <TableRow key={notification.id}>
-                <TableCell>{notification.adminId}</TableCell>
+                <TableCell>{notification.aliasName}</TableCell>
                 <TableCell>{notification.title}</TableCell>
-                <TableCell>{notification.content}</TableCell>
-                <TableCell>{notification.createdAt}</TableCell>
+                <TableCell>{notification.body}</TableCell>
+                <TableCell>{notification.sendDt}</TableCell>
                 <TableCell>
                   <Badge
-                    variant={notification.isAd ? "secondary" : "outline"}
+                    variant={
+                      notification.marketingYn === "Y" ? "secondary" : "outline"
+                    }
                     className="text-xs"
                   >
-                    {notification.isAd ? "광고" : "일반"}
+                    {notification.marketingYn === "Y" ? "광고" : "일반"}
                   </Badge>
                 </TableCell>
               </TableRow>
@@ -60,11 +61,13 @@ export default function NotificationHistory({
           </TableBody>
         </Table>
       )}
-      <PaginationControls
-        pageSize={10}
-        totalItems={100}
-        searchParams={{ startDate, endDate }}
-      />
+      {notificationHistory.totalPages > 1 && (
+        <PaginationControls
+          pageSize={notificationHistory.size}
+          totalItems={notificationHistory.totalElements}
+          searchParams={{ startDate, endDate }}
+        />
+      )}
     </div>
   );
 }

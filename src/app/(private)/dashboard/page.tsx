@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { Dashboard } from "@/app/(private)/dashboard/_components/dashboard";
 import { redirect } from "next/navigation";
+import { formatLocalDate } from "@/lib/utils";
 
 type Props = {
   searchParams: Promise<{
@@ -19,9 +20,8 @@ export default async function Page({ searchParams }: Props) {
     const thirtyDaysAgo = new Date(today);
     thirtyDaysAgo.setDate(today.getDate() - 30);
 
-    const endDate = params.endDate ?? today.toISOString().split("T")[0];
-    const startDate =
-      params.startDate ?? thirtyDaysAgo.toISOString().split("T")[0];
+    const endDate = params.endDate ?? formatLocalDate(today);
+    const startDate = params.startDate ?? formatLocalDate(thirtyDaysAgo);
 
     const queryString = new URLSearchParams();
     queryString.set("startDate", startDate);

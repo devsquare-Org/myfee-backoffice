@@ -6,6 +6,8 @@ import Link from "next/link";
 import { DateRangePicker } from "@/components/date-range-picker";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { redirect } from "next/navigation";
+import { formatLocalDate } from "@/lib/utils";
 
 type Props = {
   searchParams: Promise<{
@@ -17,7 +19,20 @@ type Props = {
 
 export default async function Notification({ searchParams }: Props) {
   const { startDate, endDate, page } = await searchParams;
-  const notificationHistory = await fetchNotificationHistory({
+
+  if (!page || !startDate || !endDate) {
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+
+    const queryString = new URLSearchParams();
+    queryString.set("page", page ?? "0");
+    queryString.set("startDate", startDate ?? formatLocalDate(thirtyDaysAgo));
+    queryString.set("endDate", endDate ?? formatLocalDate(today));
+    redirect(`/notification?${queryString.toString()}`);
+  }
+
+  const { data } = await fetchNotificationHistory({
     startDate,
     endDate,
     page,
@@ -37,8 +52,9 @@ export default async function Notification({ searchParams }: Props) {
       <Suspense fallback={<Skeleton className="w-full h-10" />}>
         <DateRangePicker placeholder="기간을 선택하세요" className="mb-4" />
       </Suspense>
+
       <NotificationHistory
-        notificationHistory={notificationHistory.data}
+        notificationHistory={data}
         startDate={startDate}
         endDate={endDate}
       />
