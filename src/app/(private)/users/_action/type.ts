@@ -33,11 +33,23 @@ export type UserDetailResponse = {
   profileImageUrl: string | null;
 };
 export type UserPointHistoryResponse = {
-  id: string;
-  point: number;
+  createDt: string;
+  issuedBy: string;
+  action: "EARN" | "SPEND" | "EXPIRE";
+  amount: number;
+  category:
+    | "CHALLENGE_PARTICIPATION"
+    | "CHALLENGE_MID_COMPLETE"
+    | "CHALLENGE_COMPLETE"
+    | "SIGNUP"
+    | "REFERRER"
+    | "SHOPPING_POINT_EXCHANGE"
+    | "ADMIN"
+    | "REFERRER"
+    | "SHOPPING_POINT_EXCHANGE"
+    | "ADMIN";
   reason: string;
-  type: string;
-  createdAt: string;
+  balanceAfter: number;
 }[];
 
 export type UserChallengeHistoryResponse = {

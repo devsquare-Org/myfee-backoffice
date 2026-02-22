@@ -1,4 +1,5 @@
 "use client";
+import { UserPointHistoryResponse } from "@/app/(private)/users/_action/type";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -10,17 +11,14 @@ import {
 } from "@/components/ui/table";
 
 type Props = {
-  pointHistory: {
-    id: string;
-    point: number;
-    type: string;
-    reason: string;
-    createdAt: string;
-    adminId?: string;
-  }[];
+  pointHistory: UserPointHistoryResponse;
 };
 
 export default function Point({ pointHistory }: Props) {
+  const sortedPointHistory = pointHistory.sort((a, b) => {
+    return new Date(b.createDt).getTime() - new Date(a.createDt).getTime();
+  });
+
   return (
     <Table className="text-xs">
       <TableHeader>
@@ -33,10 +31,10 @@ export default function Point({ pointHistory }: Props) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {pointHistory.map((item) => (
-          <TableRow key={item.id}>
+        {sortedPointHistory.map((item, idx) => (
+          <TableRow key={item.createDt + idx}>
             <TableCell>
-              {item.type === "지급" ? (
+              {item.action === "EARN" ? (
                 <Badge
                   variant="outline"
                   className="text-amber-500 border-amber-500"
@@ -52,10 +50,10 @@ export default function Point({ pointHistory }: Props) {
                 </Badge>
               )}
             </TableCell>
-            <TableCell>{item.point.toLocaleString()}</TableCell>
+            <TableCell>{item.amount.toLocaleString()}</TableCell>
             <TableCell>{item.reason}</TableCell>
-            <TableCell>{item.adminId || "system"}</TableCell>
-            <TableCell>{item.createdAt}</TableCell>
+            <TableCell>{item.issuedBy}</TableCell>
+            <TableCell>{item.createDt.replace("T", " ")}</TableCell>
           </TableRow>
         ))}
       </TableBody>

@@ -13,18 +13,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type Props = {
   params: Promise<{
-    userAlias: string;
+    userData: string;
   }>;
 };
 
 export default async function UserListPage({ params }: Props) {
-  const { userAlias } = await params;
+  const { userData } = await params;
+  const [userId, userAlias] = decodeURIComponent(userData).split("|");
 
   async function fetchData() {
     const [userDetail, pointHistory, challengeHistory] = await Promise.all([
       fetchUserDetail({ userAlias }),
-      fetchUserPointHistory({ userId: "1" }),
-      fetchUserChallengeHistory({ userId: "1" }),
+      fetchUserPointHistory({ userId }),
+      fetchUserChallengeHistory({ userId }),
     ]);
 
     return { userDetail, pointHistory, challengeHistory };

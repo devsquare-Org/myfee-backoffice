@@ -1,6 +1,6 @@
-import { UserListResponse } from '@/app/(private)/users/_action/type';
-import { PaginationControls } from '@/components/pagination-controls';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserListResponse } from "@/app/(private)/users/_action/type";
+import { PaginationControls } from "@/components/pagination-controls";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
   Table,
@@ -9,8 +9,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { ROUTES } from '@/lib/routes-config';
+} from "@/components/ui/table";
+import { ROUTES } from "@/lib/routes-config";
 
 type Props = {
   startDate?: string;
@@ -31,10 +31,10 @@ export function UserList({
   const { contents, totalElements, totalPages, size } = userListData;
   return (
     <>
-      <Table className='text-xs'>
+      <Table className="text-xs">
         <TableHeader>
           <TableRow>
-            <TableHead className='w-[100px]'>프로필</TableHead>
+            <TableHead className="w-[100px]">프로필</TableHead>
             <TableHead>이름</TableHead>
             <TableHead>닉네임</TableHead>
             <TableHead>생년월일</TableHead>
@@ -49,7 +49,10 @@ export function UserList({
         </TableHeader>
         <TableBody>
           {contents.map((user) => (
-            <TableRow key={user.id} url={`${ROUTES.USERS}/${user.alias}`}>
+            <TableRow
+              key={user.id}
+              url={`${ROUTES.USERS}/${user.id}|${user.alias}`}
+            >
               <TableCell>
                 <Avatar>
                   <AvatarImage src={user.profileImageUrl ?? ""} />

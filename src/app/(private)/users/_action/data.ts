@@ -59,48 +59,13 @@ export async function fetchUserPointHistory(
   data: UserPointHistoryResponse;
   message: string;
 }> {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  const pointHistory = [
-    {
-      id: "1",
-      point: 3500,
-      reason: "환전",
-      type: "차감",
-      createdAt: "2023-10-05 12:00:00",
-    },
-    {
-      id: "2",
-      reason: "챌린지 중간 리워드",
-      point: 1000,
-      createdAt: "2023-10-04 12:00:00",
-      type: "지급",
-    },
-    {
-      id: "3",
-      point: 500,
-      reason: "챌린지 참여 리워드",
-      createdAt: "2023-10-03 12:00:00",
-      type: "지급",
-    },
-    {
-      id: "4",
-      point: 500,
-      reason: "CS 보상",
-      createdAt: "2023-10-03 12:00:00",
-      type: "지급",
-      adminId: "sole",
-    },
-    {
-      id: "5",
-      point: 2000,
-      reason: "가입 축하 리워드",
-      createdAt: "2023-10-02 12:00:00",
-      type: "지급",
-    },
-  ];
+  const res = await myfeeFetch({
+    endpoint: `/api/admin/members/${params.userId}/points`,
+    requiresAuth: true,
+  });
 
   return {
-    data: pointHistory,
+    data: res,
     message: "포인트 내역을 성공적으로 조회하였습니다.",
   };
 }
