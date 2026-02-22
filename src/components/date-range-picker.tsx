@@ -1,6 +1,6 @@
 "use client";
 
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Calendar as CalendarIcon, ChevronDown } from "lucide-react";
 import { DateRange } from "react-day-picker";
@@ -106,10 +106,10 @@ export function DateRangePicker({
     setTempDateRange(undefined);
   }
 
-  function handleClear() {
+  function handleResetToDefault() {
     setDateRange(undefined);
     const params = new URLSearchParams(searchParams.toString());
-    params.set("startDate", format(new Date(), "yyyy-MM-dd"));
+    params.set("startDate", format(subDays(new Date(), 30), "yyyy-MM-dd"));
     params.set("endDate", format(new Date(), "yyyy-MM-dd"));
     if (params.has("page")) params.set("page", "0");
     if (params.has("reviewItemId")) params.delete("reviewItemId");
@@ -226,7 +226,7 @@ export function DateRangePicker({
             className="h-9 shadow-none"
             variant="outline"
             size="sm"
-            onClick={handleClear}
+            onClick={handleResetToDefault}
           >
             최근 30일
           </Button>
