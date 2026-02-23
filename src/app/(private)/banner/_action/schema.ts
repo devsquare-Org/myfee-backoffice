@@ -3,7 +3,7 @@ import { zfd } from "zod-form-data";
 
 export const changeOrderParams = z.array(
   z.object({
-    id: z.string(),
+    bannerId: z.number(),
     order: z.number(),
   })
 );

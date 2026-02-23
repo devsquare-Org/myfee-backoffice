@@ -89,7 +89,7 @@ export default function BannerList({ bannerList }: BannerListProps) {
     if (!hasChanges) return;
 
     const updateData = items.map((item, index) => ({
-      id: item.bannerId.toString(),
+      bannerId: item.bannerId,
       order: index + 1,
     }));
 

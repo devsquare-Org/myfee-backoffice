@@ -6,14 +6,21 @@ import {
   changeOrderParams,
   deleteBannerParams,
 } from "@/app/(private)/banner/_action/schema";
+import { myfeePost } from "@/lib/myfee-client";
 import { actionClient } from "@/lib/safe-action";
 import { redirect } from "next/navigation";
 
 export const changeOrderAction = actionClient
   .inputSchema(changeOrderParams)
   .action(async ({ parsedInput }) => {
-    console.log(parsedInput);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await myfeePost({
+      endpoint: "/api/admin/banners/sort-order",
+      body: {
+        sortOrders: parsedInput,
+      },
+      requiresAuth: true,
+    });
+
     return { message: "배너 순서를 변경했습니다." };
   });
 
