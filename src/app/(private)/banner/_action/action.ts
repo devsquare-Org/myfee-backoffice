@@ -5,7 +5,7 @@ import {
   bannerUpdateParams,
   changeOrderParams,
   deleteBannerParams,
-} from "@/app/(private)/banner/_action/req-schema";
+} from "@/app/(private)/banner/_action/schema";
 import { actionClient } from "@/lib/safe-action";
 import { redirect } from "next/navigation";
 

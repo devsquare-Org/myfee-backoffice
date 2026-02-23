@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ROUTES } from "@/lib/routes-config";
 
 export default async function BannerPage() {
-  const bannerList = await fetchBannerList();
+  const { data } = await fetchBannerList();
 
   return (
     <div>
@@ -19,7 +19,7 @@ export default async function BannerPage() {
           </Link>
         }
       />
-      <BannerList bannerList={bannerList.data} />
+      <BannerList bannerList={data} />
     </div>
   );
 }

@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { bannerUpdateAction } from "@/app/(private)/banner/_action/action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { bannerDetailResponse } from "@/app/(private)/banner/_action/res-schema";
+import { bannerDetailResponse } from "@/app/(private)/banner/_action/type";
 import BannerImagePreview from "@/app/(private)/banner/_components/banner-image-preview";
 import BannerConfirmDialog from "@/app/(private)/banner/_components/banner-confirm-dialog";
 import { CustomAlert } from "@/components/custom-alert";

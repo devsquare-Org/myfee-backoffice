@@ -1,7 +1,5 @@
 "use client";
 
-import { bannerListResponse } from "@/app/(private)/banner/_action/res-schema";
-import { z } from "zod";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { TableRow, TableCell } from "@/components/ui/table";
@@ -13,8 +11,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ROUTES } from "@/lib/routes-config";
+import { BannerListResponse } from "@/app/(private)/banner/_action/type";
 
-type Banner = z.infer<typeof bannerListResponse>[0];
+type Banner = BannerListResponse[0];
 
 export function SortableRow({ banner }: { banner: Banner }) {
   const {
@@ -24,7 +23,7 @@ export function SortableRow({ banner }: { banner: Banner }) {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: banner.id });
+  } = useSortable({ id: banner.bannerId });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -34,7 +33,7 @@ export function SortableRow({ banner }: { banner: Banner }) {
 
   return (
     <TableRow
-      url={`${ROUTES.BANNER}/${banner.id}`}
+      url={`${ROUTES.BANNER}/${banner.bannerId}`}
       ref={setNodeRef}
       style={{ ...style, touchAction: "manipulation" }}
       {...attributes}
@@ -53,7 +52,7 @@ export function SortableRow({ banner }: { banner: Banner }) {
           <TooltipTrigger asChild>
             <div className="w-12 h-8 rounded-sm flex items-center justify-center overflow-hidden cursor-pointer">
               <Image
-                src={banner.image}
+                src={banner.bannerImageUrl}
                 alt={banner.title}
                 width={48}
                 height={32}
@@ -64,7 +63,7 @@ export function SortableRow({ banner }: { banner: Banner }) {
           <TooltipContent className="p-2" side="top" sideOffset={10}>
             <div className="relative">
               <Image
-                src={banner.image}
+                src={banner.bannerImageUrl}
                 alt={banner.title}
                 width={200}
                 height={150}
@@ -78,8 +77,8 @@ export function SortableRow({ banner }: { banner: Banner }) {
       <TableCell className="max-w-[200px]">
         <div className="truncate">{banner.linkUrl}</div>
       </TableCell>
-      <TableCell>{banner.createdAt}</TableCell>
-      <TableCell>{banner.updatedAt}</TableCell>
+      <TableCell>{banner.createDt}</TableCell>
+      <TableCell>{banner.lastUpdateDt}</TableCell>
       <TableCell className="text-right align-middle"></TableCell>
     </TableRow>
   );

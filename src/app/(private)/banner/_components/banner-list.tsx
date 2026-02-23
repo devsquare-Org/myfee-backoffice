@@ -1,7 +1,6 @@
 "use client";
 
-import { z } from "zod";
-import { bannerListResponse } from "@/app/(private)/banner/_action/res-schema";
+import { BannerListResponse } from "@/app/(private)/banner/_action/type";
 import {
   Table,
   TableBody,
@@ -37,7 +36,7 @@ import { useAction } from "next-safe-action/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 
 type BannerListProps = {
-  bannerList: z.infer<typeof bannerListResponse>;
+  bannerList: BannerListResponse;
 };
 
 export default function BannerList({ bannerList }: BannerListProps) {
@@ -77,8 +76,8 @@ export default function BannerList({ bannerList }: BannerListProps) {
     const { active, over } = event;
 
     if (active.id !== over?.id) {
-      const oldIndex = items.findIndex((item) => item.id === active.id);
-      const newIndex = items.findIndex((item) => item.id === over?.id);
+      const oldIndex = items.findIndex((item) => item.bannerId === active.id);
+      const newIndex = items.findIndex((item) => item.bannerId === over?.id);
 
       const newItems = arrayMove(items, oldIndex, newIndex);
       setItems(newItems);
@@ -90,7 +89,7 @@ export default function BannerList({ bannerList }: BannerListProps) {
     if (!hasChanges) return;
 
     const updateData = items.map((item, index) => ({
-      id: item.id,
+      id: item.bannerId.toString(),
       order: index + 1,
     }));
 
@@ -179,11 +178,11 @@ export default function BannerList({ bannerList }: BannerListProps) {
               </TableRow>
             )}
             <SortableContext
-              items={items.map((item) => item.id)}
+              items={items.map((item) => item.bannerId)}
               strategy={verticalListSortingStrategy}
             >
               {items.map((banner) => (
-                <SortableRow key={banner.id} banner={banner} />
+                <SortableRow key={banner.bannerId} banner={banner} />
               ))}
             </SortableContext>
           </TableBody>

@@ -2,10 +2,41 @@
 
 import {
   bannerDetailResponse,
-  bannerListResponse,
-} from "@/app/(private)/banner/_action/res-schema";
-import { getBannerDetailParams } from "@/app/(private)/banner/_action/req-schema";
+  BannerListResponse,
+} from "@/app/(private)/banner/_action/type";
+import { getBannerDetailParams } from "@/app/(private)/banner/_action/schema";
 import z from "zod";
+import { myfeeFetch } from "@/lib/myfee-client";
+
+export async function fetchBannerList(): Promise<{
+  data: BannerListResponse;
+  message: string;
+}> {
+  const res = await myfeeFetch({
+    endpoint: "/api/admin/banners",
+    requiresAuth: true,
+  });
+
+  return {
+    data: res,
+    message: "배너 목록을 성공적으로 조회하였습니다.",
+  };
+}
+
+export async function getBannerDetail(
+  params: z.infer<typeof getBannerDetailParams>
+): Promise<{
+  data: z.infer<typeof bannerDetailResponse>;
+  message: string;
+}> {
+  const data = bannerListMock.find((item) => item.id === params.id);
+
+  console.log(params, data);
+  return {
+    data: data as z.infer<typeof bannerDetailResponse>,
+    message: "배너 상세 정보를 성공적으로 조회하였습니다.",
+  };
+}
 
 const bannerListMock = [
   {
@@ -38,29 +69,4 @@ const bannerListMock = [
     createdAt: "2025-01-01 12:00:00",
     updatedAt: "2025-01-01 12:00:00",
   },
-] as z.infer<typeof bannerListResponse>;
-
-export async function fetchBannerList(): Promise<{
-  data: z.infer<typeof bannerListResponse>;
-  message: string;
-}> {
-  return {
-    data: bannerListMock,
-    message: "배너 목록을 성공적으로 조회하였습니다.",
-  };
-}
-
-export async function getBannerDetail(
-  params: z.infer<typeof getBannerDetailParams>
-): Promise<{
-  data: z.infer<typeof bannerDetailResponse>;
-  message: string;
-}> {
-  const data = bannerListMock.find((item) => item.id === params.id);
-
-  console.log(params, data);
-  return {
-    data: data as z.infer<typeof bannerDetailResponse>,
-    message: "배너 상세 정보를 성공적으로 조회하였습니다.",
-  };
-}
+];
