@@ -33,8 +33,9 @@ function getRouteInfo(path: string, pathIndex: number, allPaths: string[]) {
     };
   }
 
-  // 동적 라우트 처리 (예: [bannerId])
-  if (path.match(/^\[.*\]$/) || path.match(/^[0-9a-f-]+$/)) {
+  // 동적 라우트 처리 (예: [bannerId], 30|jmpark 등)
+  const decoded = decodeURIComponent(path);
+  if (decoded.includes("|") || path.match(/^\[.*\]$/) || path.match(/^[0-9a-f-]+$/)) {
     return {
       path: "#",
       label: "상세",
@@ -44,7 +45,7 @@ function getRouteInfo(path: string, pathIndex: number, allPaths: string[]) {
   // 기본값
   return {
     path: "#",
-    label: path,
+    label: decoded,
   };
 }
 
