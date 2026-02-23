@@ -1,6 +1,7 @@
 "use client";
 import { UserPointHistoryResponse } from "@/app/(private)/users/_action/type";
 import { Badge } from "@/components/ui/badge";
+import { formatUtcToKst } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -53,7 +54,7 @@ export default function Point({ pointHistory }: Props) {
             <TableCell>{item.amount.toLocaleString()}</TableCell>
             <TableCell>{item.reason}</TableCell>
             <TableCell>{item.issuedBy}</TableCell>
-            <TableCell>{item.createDt.split("T")[0]}</TableCell>
+            <TableCell>{formatUtcToKst(item.createDt)}</TableCell>
           </TableRow>
         ))}
       </TableBody>

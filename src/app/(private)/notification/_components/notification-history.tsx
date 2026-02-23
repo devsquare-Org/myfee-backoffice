@@ -2,6 +2,7 @@
 
 import { NotificationHistoryResponse } from "@/app/(private)/notification/_action/type";
 import { CustomAlert } from "@/components/custom-alert";
+import { formatUtcToKst } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -46,9 +47,7 @@ export default function NotificationHistory({
                 <TableCell>{notification.title}</TableCell>
                 <TableCell>{notification.body}</TableCell>
                 <TableCell>
-                  {notification.sendDt.split("T")[0] +
-                    " " +
-                    notification.sendDt.split("T")[1]}
+                  {formatUtcToKst(notification.sendDt)}
                 </TableCell>
                 <TableCell>
                   <Badge
