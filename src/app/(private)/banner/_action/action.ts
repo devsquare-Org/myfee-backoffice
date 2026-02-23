@@ -6,7 +6,7 @@ import {
   changeOrderParams,
   deleteBannerParams,
 } from "@/app/(private)/banner/_action/schema";
-import { myfeePost } from "@/lib/myfee-client";
+import { myfeePost, myfeePostFormData } from "@/lib/myfee-client";
 import { actionClient } from "@/lib/safe-action";
 import { redirect } from "next/navigation";
 
@@ -27,8 +27,16 @@ export const changeOrderAction = actionClient
 export const bannerCreateAction = actionClient
   .inputSchema(bannerCreateParams)
   .action(async ({ parsedInput }) => {
-    console.log(parsedInput);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const formData = new FormData();
+    formData.append("title", parsedInput.title);
+    formData.append("linkUrl", parsedInput.linkUrl);
+    formData.append("bannerImageFile", parsedInput.imageFile);
+
+    await myfeePostFormData({
+      endpoint: "/api/admin/banners",
+      body: formData,
+      requiresAuth: true,
+    });
     return { message: "배너를 생성했습니다." };
   });
 

@@ -71,6 +71,44 @@ export async function myfeePost({
   return data;
 }
 
+type MyfeePostFormDataParams = {
+  endpoint: string;
+  requiresAuth?: boolean;
+  body: FormData;
+};
+
+export async function myfeePostFormData({
+  endpoint,
+  body,
+  requiresAuth,
+}: MyfeePostFormDataParams) {
+  const response = await fetch(`${process.env.MYFEE_BASE_URL}${endpoint}`, {
+    method: "POST",
+    headers: {
+      Accept: "*/*",
+      ...(requiresAuth && {
+        Authorization: `Bearer ${await getMyfeeAccessToken()}`,
+      }),
+    },
+    body,
+  });
+
+  // 204 No Content 응답 처리
+  const text = await response.text();
+  const data = text ? JSON.parse(text) : null;
+
+  if (!response.ok) {
+    throw new AppError({
+      from: "myfee",
+      code: data.code,
+      message: data.message,
+      status: data.status,
+    });
+  }
+
+  return data;
+}
+
 type MyfeeDeleteParams = {
   endpoint: string;
   requiresAuth?: boolean;
