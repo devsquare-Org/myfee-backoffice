@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 export async function getMyfeeRefreshToken() {
   const cookieStore = await cookies();
-  const token = cookieStore.get("refreshToken")?.value;
+  const token = cookieStore.get("__myfee_admin_refreshToken")?.value;
 
   if (!token) {
     throw new AppError({
@@ -19,7 +19,7 @@ export async function getMyfeeRefreshToken() {
 
 export async function getMyfeeAccessToken() {
   const cookieStore = await cookies();
-  const token = cookieStore.get("accessToken")?.value;
+  const token = cookieStore.get("__myfee_admin_accessToken")?.value;
 
   if (!token) {
     throw new AppError({

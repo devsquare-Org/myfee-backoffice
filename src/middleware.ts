@@ -15,8 +15,8 @@ const cookieOptions = {
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  const accessToken = request.cookies.get("accessToken")?.value;
-  const refreshToken = request.cookies.get("refreshToken")?.value;
+  const accessToken = request.cookies.get("__myfee_admin_accessToken")?.value;
+  const refreshToken = request.cookies.get("__myfee_admin_refreshToken")?.value;
 
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
   const isSigninPage = pathname === "/signin";
@@ -54,20 +54,20 @@ export async function middleware(request: NextRequest) {
     const bufferSecs = Math.abs(bufferRemaining) % 60;
     console.log(
       "남은 시간 (토큰):",
-      `${expiresInMinutes}분 ${expiresInSeconds % 60}초`,
+      `${expiresInMinutes}분 ${expiresInSeconds % 60}초`
     );
     console.log(
       "남은 시간 (갱신까지):",
       bufferRemaining > 0
         ? `${bufferMinutes}분 ${bufferSecs}초`
-        : `${bufferMinutes}분 ${bufferSecs}초 초과`,
+        : `${bufferMinutes}분 ${bufferSecs}초 초과`
     );
     console.log("만료 여부:", expMs <= now ? "만료됨" : "유효함");
     console.log(
       "갱신 필요:",
       expiresInSeconds < TOKEN_REFRESH_BUFFER_SECONDS
         ? `예 (${TOKEN_REFRESH_BUFFER_SECONDS / 60}분 이내)`
-        : "아니오",
+        : "아니오"
     );
 
     if (expiresInSeconds < TOKEN_REFRESH_BUFFER_SECONDS) {
@@ -77,19 +77,23 @@ export async function middleware(request: NextRequest) {
 
       if (tokens) {
         const response = NextResponse.next();
-        response.cookies.set("accessToken", tokens.accessToken, cookieOptions);
         response.cookies.set(
-          "refreshToken",
+          "__myfee_admin_accessToken",
+          tokens.accessToken,
+          cookieOptions
+        );
+        response.cookies.set(
+          "__myfee_admin_refreshToken",
           tokens.refreshToken,
-          cookieOptions,
+          cookieOptions
         );
         return response;
       }
 
       // 갱신 실패 → 쿠키 제거 후 로그인 페이지로
       const response = NextResponse.redirect(new URL("/signin", request.url));
-      response.cookies.delete("accessToken");
-      response.cookies.delete("refreshToken");
+      response.cookies.delete("__myfee_admin_accessToken");
+      response.cookies.delete("__myfee_admin_refreshToken");
       return response;
     }
   }

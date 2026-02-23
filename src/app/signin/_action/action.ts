@@ -15,8 +15,8 @@ export const loginAction = actionClient
     });
 
     const cookieStore = await cookies();
-    cookieStore.set("accessToken", res.accessToken);
-    cookieStore.set("refreshToken", res.refreshToken);
+    cookieStore.set("__myfee_admin_accessToken", res.accessToken);
+    cookieStore.set("__myfee_admin_refreshToken", res.refreshToken);
 
     return {
       data: res,
@@ -27,7 +27,7 @@ export const loginAction = actionClient
 
 export const logoutAction = actionClient.action(async () => {
   const cookieStore = await cookies();
-  cookieStore.delete("accessToken");
-  cookieStore.delete("refreshToken");
+  cookieStore.delete("__myfee_admin_accessToken");
+  cookieStore.delete("__myfee_admin_refreshToken");
   redirect("/signin");
 });
