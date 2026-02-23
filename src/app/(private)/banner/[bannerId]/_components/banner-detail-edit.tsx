@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { bannerUpdateAction } from "@/app/(private)/banner/_action/action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { bannerDetailResponse } from "@/app/(private)/banner/_action/type";
+import { BannerDetailResponse } from "@/app/(private)/banner/_action/type";
 import BannerImagePreview from "@/app/(private)/banner/_components/banner-image-preview";
 import BannerConfirmDialog from "@/app/(private)/banner/_components/banner-confirm-dialog";
 import { CustomAlert } from "@/components/custom-alert";
@@ -34,12 +34,14 @@ const clientSchema = z.object({
 });
 
 type Props = {
-  data: z.infer<typeof bannerDetailResponse>;
+  data: BannerDetailResponse;
 };
 
 export default function BannerDetailEdit({ data }: Props) {
   const [isSubmit, setIsSubmit] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(data.image);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    data.bannerImageUrl
+  );
 
   const submitRef = useRef<HTMLButtonElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -69,7 +71,7 @@ export default function BannerDetailEdit({ data }: Props) {
     if (isSubmit) {
       const formData = new FormData();
       const values = form.getValues();
-      formData.append("id", data.id);
+      formData.append("id", data.bannerId.toString());
       formData.append("title", values.title);
       formData.append("linkUrl", values.linkUrl);
       if (values.imageFile) formData.append("imageFile", values.imageFile);
@@ -226,7 +228,7 @@ export default function BannerDetailEdit({ data }: Props) {
   );
 }
 
-function AlertArea({ data }: { data: z.infer<typeof bannerDetailResponse> }) {
+function AlertArea({ data }: { data: BannerDetailResponse }) {
   return (
     <div>
       <CustomAlert
@@ -234,8 +236,8 @@ function AlertArea({ data }: { data: z.infer<typeof bannerDetailResponse> }) {
         title="배너 생성 및 수정 일시"
         description={
           <ul className="flex flex-col gap-1 mt-2 list-disc list-outside">
-            <li>최초 생성일: {data.createdAt}</li>
-            <li>마지막 수정일: {data.updatedAt}</li>
+            <li>최초 생성일: {data.createDt}</li>
+            <li>마지막 수정일: {data.lastUpdateDt}</li>
           </ul>
         }
         type="default"
