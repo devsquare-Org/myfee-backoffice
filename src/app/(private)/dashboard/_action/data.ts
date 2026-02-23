@@ -7,7 +7,7 @@ import { myfeeFetch } from "@/lib/myfee-client";
 import { z } from "zod";
 
 export async function fetchDashboardData(
-  params: z.infer<typeof dashboardDataParams>,
+  params: z.infer<typeof dashboardDataParams>
 ): Promise<{
   data: DashboardDataResponse;
   message: string;

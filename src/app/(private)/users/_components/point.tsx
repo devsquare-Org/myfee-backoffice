@@ -53,7 +53,7 @@ export default function Point({ pointHistory }: Props) {
             <TableCell>{item.amount.toLocaleString()}</TableCell>
             <TableCell>{item.reason}</TableCell>
             <TableCell>{item.issuedBy}</TableCell>
-            <TableCell>{item.createDt.replace("T", " ")}</TableCell>
+            <TableCell>{item.createDt.split("T")[0]}</TableCell>
           </TableRow>
         ))}
       </TableBody>
