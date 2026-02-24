@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { bannerCreateAction } from "@/app/(private)/banner/_action/action";
+import { bannerCreateParams } from "@/app/(private)/banner/_action/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import BannerImagePreview from "@/app/(private)/banner/_components/banner-image-preview";
@@ -19,21 +20,7 @@ import ClipboardUrlProposal from "@/app/(private)/banner/_components/clipboard-u
 import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 
-// 클라이언트용 스키마 (리졸버용)
-const clientSchema = z.object({
-  title: z.string().min(3, "제목을 3글자 이상 입력해주세요."),
-  imageFile: z
-    .instanceof(File, { message: "이미지를 첨부해주세요." })
-    .refine((file) => file.size <= 5 * 1024 * 1024, {
-      message: "이미지 크기는 5MB 이하여야 합니다.",
-    })
-    .refine((file) => file.type.startsWith("image/"), {
-      message: "이미지 파일만 업로드 가능합니다.",
-    }),
-  linkUrl: z.url({ message: "링크를 정확하게 입력해주세요." }),
-});
-
-export default function CreatePage() {
+export default function Page() {
   const [isSubmit, setIsSubmit] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -53,8 +40,8 @@ export default function CreatePage() {
     },
   });
 
-  const form = useForm<z.infer<typeof clientSchema>>({
-    resolver: zodResolver(clientSchema),
+  const form = useForm<z.infer<typeof bannerCreateParams>>({
+    resolver: zodResolver(bannerCreateParams),
     mode: "onChange",
     defaultValues: {
       title: "",
@@ -64,15 +51,7 @@ export default function CreatePage() {
   });
 
   function onSubmit() {
-    if (isSubmit) {
-      const formData = new FormData();
-      const values = form.getValues();
-      formData.append("title", values.title);
-      formData.append("linkUrl", values.linkUrl);
-      formData.append("imageFile", values.imageFile);
-
-      execute(formData);
-    }
+    if (isSubmit) execute(form.getValues());
   }
 
   function handleFileChange(file: File | undefined) {
