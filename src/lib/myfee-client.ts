@@ -130,7 +130,9 @@ export async function myfeeDelete({
     },
   });
 
-  const data = await response.json();
+  // 204 No Content 응답 처리
+  const text = await response.text();
+  const data = text ? JSON.parse(text) : null;
 
   if (!response.ok) {
     throw new AppError({

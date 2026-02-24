@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 import { ROUTES } from "@/lib/routes-config";
 import { BannerListResponse } from "@/app/(private)/banner/_action/type";
+import { formatUtcToKst } from "@/lib/utils";
 
 type Banner = BannerListResponse[0];
 
@@ -77,8 +78,8 @@ export function SortableRow({ banner }: { banner: Banner }) {
       <TableCell className="max-w-[200px]">
         <div className="truncate">{banner.linkUrl}</div>
       </TableCell>
-      <TableCell>{banner.createDt}</TableCell>
-      <TableCell>{banner.lastUpdateDt}</TableCell>
+      <TableCell>{formatUtcToKst(banner.createDt)}</TableCell>
+      <TableCell>{formatUtcToKst(banner.lastUpdateDt)}</TableCell>
       <TableCell className="text-right align-middle"></TableCell>
     </TableRow>
   );

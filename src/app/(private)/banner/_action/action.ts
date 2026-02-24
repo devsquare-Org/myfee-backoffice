@@ -6,8 +6,9 @@ import {
   changeOrderParams,
   deleteBannerParams,
 } from "@/app/(private)/banner/_action/schema";
-import { myfeePost, myfeeFormData } from "@/lib/myfee-client";
+import { myfeePost, myfeeFormData, myfeeDelete } from "@/lib/myfee-client";
 import { actionClient } from "@/lib/safe-action";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const changeOrderAction = actionClient
@@ -37,6 +38,9 @@ export const bannerCreateAction = actionClient
       body: formData,
       requiresAuth: true,
     });
+
+    revalidatePath("/banner");
+
     return { message: "배너를 생성했습니다." };
   });
 
@@ -68,8 +72,11 @@ export const bannerUpdateAction = actionClient
 export const deleteBannerAction = actionClient
   .inputSchema(deleteBannerParams)
   .action(async ({ parsedInput }) => {
-    console.log(parsedInput);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await myfeeDelete({
+      endpoint: `/api/admin/banners/${parsedInput.id}`,
+      requiresAuth: true,
+    });
+
     redirect("/banner");
   });
 
