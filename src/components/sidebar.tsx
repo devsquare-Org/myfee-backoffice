@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import {
   Sidebar as SahdcnSidebar,
   SidebarContent,
@@ -70,7 +71,17 @@ export function Sidebar() {
     <SahdcnSidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>MyFee Backoffice</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/images/logo.png"
+                alt="MyFee Logo"
+                width={20}
+                height={20}
+              />
+              <p className="text-sm font-medium">MyFee Backoffice</p>
+            </div>
+          </SidebarGroupLabel>
           <Button
             variant="outline"
             onClick={openGlobalCommand}

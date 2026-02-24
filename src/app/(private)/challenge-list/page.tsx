@@ -1,11 +1,11 @@
-import { fetchChallengeList } from "@/app/(private)/challenge-list/_action/data";
 import ChallengeList from "@/app/(private)/challenge-list/_components/challenge-list";
+import CustomLoading from "@/components/custom-loading";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default async function Page() {
-  const { data } = await fetchChallengeList();
   return (
     <div>
       <div>
@@ -20,7 +20,9 @@ export default async function Page() {
         />
       </div>
 
-      <ChallengeList challengeList={data} />
+      <Suspense fallback={<CustomLoading />}>
+        <ChallengeList />
+      </Suspense>
     </div>
   );
 }

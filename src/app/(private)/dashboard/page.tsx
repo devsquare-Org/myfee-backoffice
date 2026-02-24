@@ -1,9 +1,9 @@
 import { PageHeader } from "@/components/page-header";
 import { Suspense } from "react";
-import { Loader2 } from "lucide-react";
 import { Dashboard } from "@/app/(private)/dashboard/_components/dashboard";
 import { redirect } from "next/navigation";
 import { formatLocalDate } from "@/lib/utils";
+import CustomLoading from "@/components/custom-loading";
 
 type Props = {
   searchParams: Promise<{
@@ -36,13 +36,7 @@ export default async function Page({ searchParams }: Props) {
         title="대시보드"
         description="마이피 앱 데이터를 확인할 수 있습니다."
       />
-      <Suspense
-        fallback={
-          <div className="flex justify-center items-center h-200">
-            <Loader2 size={40} className="animate-spin" />
-          </div>
-        }
-      >
+      <Suspense fallback={<CustomLoading />}>
         <Dashboard startDate={params.startDate} endDate={params.endDate} />
       </Suspense>
     </div>

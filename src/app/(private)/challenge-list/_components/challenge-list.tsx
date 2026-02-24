@@ -1,5 +1,3 @@
-"use client";
-
 import { CustomAlert } from "@/components/custom-alert";
 import {
   Table,
@@ -9,13 +7,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChallengeListResponse } from "@/app/(private)/challenge-list/_action/type";
+import { fetchChallengeList } from "@/app/(private)/challenge-list/_action/data";
 
-type Props = {
-  challengeList: ChallengeListResponse;
-};
+export default async function ChallengeList() {
+  const { data: challengeList } = await fetchChallengeList();
 
-export default function ChallengeList({ challengeList }: Props) {
   return (
     <div>
       {challengeList.length === 0 ? (
