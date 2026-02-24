@@ -71,19 +71,21 @@ export async function myfeePost({
   return data;
 }
 
-type MyfeePostFormDataParams = {
+type MyfeeFormDataParams = {
   endpoint: string;
   requiresAuth?: boolean;
   body: FormData;
+  method?: "POST" | "PUT" | "PATCH";
 };
 
-export async function myfeePostFormData({
+export async function myfeeFormData({
   endpoint,
   body,
   requiresAuth,
-}: MyfeePostFormDataParams) {
+  method = "POST",
+}: MyfeeFormDataParams) {
   const response = await fetch(`${process.env.MYFEE_BASE_URL}${endpoint}`, {
-    method: "POST",
+    method,
     headers: {
       Accept: "*/*",
       ...(requiresAuth && {
@@ -163,52 +165,6 @@ export async function myfeePut({
       }),
     },
     ...(body && { body: JSON.stringify(body) }),
-  });
-
-  // 204 No Content 응답 처리
-  const text = await response.text();
-  const data = text ? JSON.parse(text) : null;
-
-  if (!response.ok) {
-    throw new AppError({
-      from: "myfee",
-      code: data.code,
-      message: data.message,
-      status: data.status,
-    });
-  }
-
-  return data;
-}
-
-type MyfeePutFileParams = {
-  endpoint: string;
-  requiresAuth?: boolean;
-  file: File | null;
-  fieldName?: string;
-};
-
-export async function myfeePutFile({
-  endpoint,
-  file,
-  requiresAuth,
-  fieldName = "file",
-}: MyfeePutFileParams) {
-  const formData = new FormData();
-
-  // file이 있을 때만 추가 (null이면 빈 FormData)
-  if (file !== null) {
-    formData.append(fieldName, file);
-  }
-
-  const response = await fetch(`${process.env.MYFEE_BASE_URL}${endpoint}`, {
-    method: "PUT",
-    headers: {
-      ...(requiresAuth && {
-        Authorization: `Bearer ${await getMyfeeAccessToken()}`,
-      }),
-    },
-    body: formData,
   });
 
   // 204 No Content 응답 처리

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { bannerUpdateAction } from "@/app/(private)/banner/_action/action";
+import { bannerUpdateParams } from "@/app/(private)/banner/_action/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { BannerDetailResponse } from "@/app/(private)/banner/_action/type";
@@ -18,20 +19,7 @@ import CustomFormLabel from "@/components/custom-form-label";
 import ClipboardUrlProposal from "@/app/(private)/banner/_components/clipboard-url-proposal";
 import { Card } from "@/components/ui/card";
 
-// 클라이언트용 스키마 (리졸버용)
-const clientSchema = z.object({
-  title: z.string().min(3, "제목을 3글자 이상 입력해주세요."),
-  imageFile: z
-    .instanceof(File, { message: "이미지를 첨부해주세요." })
-    .optional()
-    .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
-      message: "이미지 크기는 5MB 이하여야 합니다.",
-    })
-    .refine((file) => !file || file.type.startsWith("image/"), {
-      message: "이미지 파일만 업로드 가능합니다.",
-    }),
-  linkUrl: z.url({ message: "링크를 정확하게 입력해주세요." }),
-});
+const clientSchema = bannerUpdateParams.omit({ id: true });
 
 type Props = {
   data: BannerDetailResponse;
@@ -48,7 +36,11 @@ export default function BannerDetailEdit({ data }: Props) {
   const { execute, isExecuting } = useAction(bannerUpdateAction, {
     onSuccess: ({ data }) => {
       toast.success(data.message);
-      form.reset();
+      form.reset({
+        title: form.getValues("title"),
+        linkUrl: form.getValues("linkUrl"),
+        imageUrl: form.getValues("imageUrl"),
+      });
       setIsSubmit(false);
       fileInputRef.current!.value = "";
     },
@@ -69,14 +61,12 @@ export default function BannerDetailEdit({ data }: Props) {
 
   function onSubmit() {
     if (isSubmit) {
-      const formData = new FormData();
-      const values = form.getValues();
-      formData.append("id", data.bannerId.toString());
-      formData.append("title", values.title);
-      formData.append("linkUrl", values.linkUrl);
-      if (values.imageFile) formData.append("imageFile", values.imageFile);
-
-      execute(formData);
+      execute({
+        id: data.bannerId.toString(),
+        ...form.getValues(),
+        // 이미지 교체하지 않을 경우 기존 이미지 URL을 전송
+        imageUrl: data.bannerImageUrl,
+      });
     }
   }
 
