@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { useAction } from "next-safe-action/hooks";
 import { rejectChallengeReviewAction } from "@/app/(private)/challenge-review/_action/action";
 import { toast } from "sonner";
-import { useFetchReviewList } from "@/app/(private)/challenge-review/_hooks/use-fetch-review-list";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -35,6 +34,7 @@ type Props = {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   setIsActionExecuting: (isActionExecuting: boolean) => void;
+  onRefreshAction: () => void;
 };
 
 export function RejectDialog({
@@ -42,21 +42,21 @@ export function RejectDialog({
   isOpen,
   setIsOpen,
   setIsActionExecuting,
+  onRefreshAction,
 }: Props) {
   const [isDirectInput, setIsDirectInput] = useState(false);
-  const { fetchReviewList } = useFetchReviewList();
   const { execute, isExecuting } = useAction(rejectChallengeReviewAction, {
     onSuccess: ({ data }) => {
       toast.success(data?.message);
       setIsOpen(false);
-      fetchReviewList();
+      onRefreshAction();
       form.reset();
       setIsActionExecuting(isExecuting);
     },
     onError: ({ error: { serverError } }) => {
       toast.error(serverError?.message);
       setIsActionExecuting(isExecuting);
-      fetchReviewList();
+      onRefreshAction();
       setIsOpen(false);
       form.reset();
     },

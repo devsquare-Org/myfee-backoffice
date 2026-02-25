@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { useAction } from "next-safe-action/hooks";
 import { approveChallengeReviewAction } from "@/app/(private)/challenge-review/_action/action";
 import { toast } from "sonner";
-import { useFetchReviewList } from "@/app/(private)/challenge-review/_hooks/use-fetch-review-list";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { CustomAlert } from "@/components/custom-alert";
@@ -18,6 +17,7 @@ type Props = {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   setIsActionExecuting: (isActionExecuting: boolean) => void;
+  onRefreshAction: () => void;
 };
 
 export function ApprovedDialog({
@@ -25,19 +25,19 @@ export function ApprovedDialog({
   isOpen,
   setIsOpen,
   setIsActionExecuting,
+  onRefreshAction,
 }: Props) {
-  const { fetchReviewList } = useFetchReviewList();
   const { execute, isExecuting } = useAction(approveChallengeReviewAction, {
     onSuccess: ({ data }) => {
       toast.success(data?.message);
       setIsOpen(false);
-      fetchReviewList();
+      onRefreshAction();
       setIsActionExecuting(isExecuting);
     },
     onError: ({ error: { serverError } }) => {
       toast.error(serverError?.message);
       setIsActionExecuting(isExecuting);
-      fetchReviewList();
+      onRefreshAction();
       setIsOpen(false);
     },
   });

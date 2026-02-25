@@ -1,15 +1,16 @@
 "use client";
 
 import { ReviewList as ReviewListType } from "@/app/(private)/challenge-review/_action/type";
-import { formatUtcToKst } from "@/lib/utils";
+import { cn, formatUtcToKst } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef } from "react";
 
 type Props = {
   reviewList: ReviewListType;
+  selectedItemId: string;
 };
 
-export function ReviewList({ reviewList }: Props) {
+export function ReviewList({ reviewList, selectedItemId }: Props) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -51,25 +52,22 @@ export function ReviewList({ reviewList }: Props) {
     replace(`${pathname}?${params.toString()}`);
   }
 
-  const sortedContents = useMemo(() => {
-    return reviewList.contents.sort((a, b) => {
-      return new Date(b.createDt).getTime() - new Date(a.createDt).getTime();
-    });
-  }, [reviewList.contents]);
-
   return (
     <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-      <StatusLabel status={status} length={sortedContents.length} />
-      {sortedContents.map((review) => {
+      <StatusLabel status={status} length={reviewList.contents.length} />
+      {reviewList.contents.map((review) => {
         return (
           <div key={review.feedId} className="relative">
             <div
+              className={cn(
+                "my-2 rounded-md border cursor-pointer",
+                selectedItemId === review.feedId.toString() && "bg-secondary"
+              )}
               onClick={() => {
-                selectReviewItem(review.challengeId.toString());
+                selectReviewItem(review.feedId.toString());
               }}
-              className="my-2"
             >
-              <div className="flex flex-col gap-1 flex-1 border rounded-md p-2">
+              <div className="flex flex-col gap-1 flex-1 rounded-md p-2">
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-semibold line-clamp-1">
                     {review.title}

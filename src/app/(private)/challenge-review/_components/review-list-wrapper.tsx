@@ -1,44 +1,19 @@
-"use client";
-
-import { useEffect } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { format, subDays } from "date-fns";
 import { ReviewList } from "@/app/(private)/challenge-review/_components/review-list";
-import { useFetchReviewList } from "@/app/(private)/challenge-review/_hooks/use-fetch-review-list";
 import { PaginationControls } from "@/components/pagination-controls";
+import { ReviewList as ReviewListType } from "@/app/(private)/challenge-review/_action/type";
 
-export function ReviewListWrapper() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { fetchReviewList, reviewList } = useFetchReviewList();
+type Props = {
+  reviewList: ReviewListType | null;
+  selectedItemId: string;
+};
 
-  const status = searchParams.get("status") || "";
-  const startDate = searchParams.get("startDate") || "";
-  const endDate = searchParams.get("endDate") || "";
-  const page = searchParams.get("page") || "0";
-
-  useEffect(() => {
-    if (!searchParams.get("startDate") && !searchParams.get("endDate")) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("startDate", format(subDays(new Date(), 30), "yyyy-MM-dd"));
-      params.set("endDate", format(new Date(), "yyyy-MM-dd"));
-      router.replace(`${pathname}?${params.toString()}`);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (startDate && endDate) {
-      fetchReviewList();
-    }
-  }, [status, startDate, endDate, page]);
-
+export function ReviewListWrapper({ reviewList, selectedItemId }: Props) {
   if (!reviewList) return null;
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-auto">
-        <ReviewList reviewList={reviewList} />
+        <ReviewList reviewList={reviewList} selectedItemId={selectedItemId} />
       </div>
 
       {reviewList.contents.length > 0 && reviewList.totalPages > 1 && (

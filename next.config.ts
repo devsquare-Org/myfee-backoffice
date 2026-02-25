@@ -5,18 +5,6 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "picsum.photos",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
         hostname: "shopby-images.cdn-nhncommerce.com",
         port: "",
         pathname: "/**",
@@ -24,6 +12,12 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "d18zclbuw27n4c.cloudfront.net",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "dev-api.myfee.kr",
         port: "",
         pathname: "/**",
       },

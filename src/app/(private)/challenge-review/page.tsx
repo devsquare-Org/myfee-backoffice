@@ -12,12 +12,14 @@ export default function ChallengeReview() {
         title="챌린지 인증"
         description="챌린지 인증 관리 페이지입니다."
       />
+
       <Suspense fallback={<Skeleton className="w-72 h-9 mb-4" />}>
         <div className="flex gap-2 mb-4">
           <StatusSelector />
           <DateRangePicker />
         </div>
       </Suspense>
+
       <Suspense fallback={<Skeleton className="w-full flex-1 mb-4" />}>
         <ChallengeReviewContainer />
       </Suspense>
