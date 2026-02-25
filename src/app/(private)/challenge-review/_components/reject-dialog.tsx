@@ -86,7 +86,6 @@ export function RejectDialog({
       feedId: feedId,
       memberId: memberId,
       review: "REJECTED",
-      note: "",
     },
   });
 
