@@ -54,7 +54,7 @@ export function ReviewList({ reviewList, selectedItemId }: Props) {
 
   return (
     <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-      <StatusLabel status={status} length={reviewList.contents.length} />
+      <StatusLabel status={status} length={reviewList.totalElements} />
       {reviewList.contents.map((review) => {
         return (
           <div key={review.feedId} className="relative">
