@@ -1,6 +1,7 @@
 export const ROUTES = {
   DASHBOARD: "/dashboard",
   CHALLENGE_LIST: "/challenge-list",
+  CHALLENGE_CREATE: "/challenge-list/create",
   CHALLENGE_REVIEW_LIST: "/challenge-review",
   USERS: "/users",
   NOTIFICATION: "/notification",
@@ -15,6 +16,7 @@ export const ROUTES = {
 export const ROUTE_LABELS: Record<string, string> = {
   "/dashboard": "대시보드",
   "/challenge-list": "챌린지 관리",
+  "/challenge-list/create": "챌린지 등록",
   "/challenge-review": "챌린지 인증",
   "/users": "유저 관리",
   "/notification": "푸시 알림",
