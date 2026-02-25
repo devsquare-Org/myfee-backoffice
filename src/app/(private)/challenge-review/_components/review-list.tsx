@@ -1,15 +1,12 @@
 "use client";
 
+import { ReviewList as ReviewListType } from "@/app/(private)/challenge-review/_action/type";
+import { formatUtcToKst } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 
 type Props = {
-  reviewList: {
-    id: number;
-    title: string;
-    body: string;
-    createdAt: string;
-  }[];
+  reviewList: ReviewListType;
 };
 
 export function ReviewList({ reviewList }: Props) {
@@ -21,7 +18,7 @@ export function ReviewList({ reviewList }: Props) {
     searchParams.get("reviewItemId")?.toString() || ""
   );
   const [status, setStatus] = useState(
-    searchParams.get("status")?.toString() || "pending"
+    searchParams.get("status")?.toString() || "REVIEWING"
   );
 
   // 스크롤 리셋용 파라미터들
@@ -37,7 +34,7 @@ export function ReviewList({ reviewList }: Props) {
 
   // status 변경 시 변경된 값을 저장
   useEffect(() => {
-    setStatus(searchParams.get("status")?.toString() || "pending");
+    setStatus(searchParams.get("status")?.toString() || "REVIEWING");
   }, [searchParams, pathname]);
 
   // reviewItemId 외 파라미터 변경 시 스크롤 최상단 이동
@@ -54,28 +51,35 @@ export function ReviewList({ reviewList }: Props) {
     replace(`${pathname}?${params.toString()}`);
   }
 
+  const sortedContents = useMemo(() => {
+    return reviewList.contents.sort((a, b) => {
+      return new Date(b.createDt).getTime() - new Date(a.createDt).getTime();
+    });
+  }, [reviewList.contents]);
+
   return (
     <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-      <StatusLabel status={status} length={reviewList.length} />
-      {reviewList.map((review) => {
+      <StatusLabel status={status} length={sortedContents.length} />
+      {sortedContents.map((review) => {
         return (
-          <div key={review.id} className="relative">
+          <div key={review.feedId} className="relative">
             <div
               onClick={() => {
-                selectReviewItem(review.id.toString());
+                selectReviewItem(review.challengeId.toString());
               }}
+              className="my-2"
             >
-              <div className="flex flex-col gap-1 flex-1">
+              <div className="flex flex-col gap-1 flex-1 border rounded-md p-2">
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-semibold line-clamp-1">
                     {review.title}
                   </p>
                 </div>
                 <p className="text-xs text-muted-foreground font-medium line-clamp-1">
-                  {review.body}
+                  {review.content}
                 </p>
                 <p className="text-[10px] text-muted-foreground font-semibold">
-                  {review.createdAt}
+                  {formatUtcToKst(review.createDt)}
                 </p>
               </div>
             </div>
@@ -88,7 +92,7 @@ export function ReviewList({ reviewList }: Props) {
 
 function StatusLabel({ status, length }: { status: string; length: number }) {
   switch (status) {
-    case "pending":
+    case "REVIEWING":
       return (
         <div className="flex items-center gap-2 my-4">
           <div className="min-w-2 min-h-2 max-w-2 max-h-2 rounded-full bg-yellow-500" />
@@ -97,7 +101,7 @@ function StatusLabel({ status, length }: { status: string; length: number }) {
           </p>
         </div>
       );
-    case "approved":
+    case "APPROVED":
       return (
         <div className="flex items-center gap-2 my-4">
           <div className="min-w-2 min-h-2 max-w-2 max-h-2 rounded-full bg-blue-500" />
@@ -106,7 +110,7 @@ function StatusLabel({ status, length }: { status: string; length: number }) {
           </p>
         </div>
       );
-    case "rejected":
+    case "REJECTED":
       return (
         <div className="flex items-center gap-2 my-4">
           <div className="min-w-2 min-h-2 max-w-2 max-h-2 rounded-full bg-red-500" />

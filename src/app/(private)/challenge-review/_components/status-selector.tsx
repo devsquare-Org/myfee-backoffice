@@ -16,11 +16,11 @@ export default function StatusSelector({ className }: { className?: string }) {
   const pathname = usePathname();
   const { replace } = useRouter();
   const [selectedValue, setSelectedValue] = useState(
-    searchParams.get("status")?.toString() || "pending"
+    searchParams.get("status")?.toString() || "REVIEWING"
   );
 
   useEffect(() => {
-    setSelectedValue(searchParams.get("status")?.toString() || "pending");
+    setSelectedValue(searchParams.get("status")?.toString() || "REVIEWING");
   }, [searchParams, pathname]);
 
   function handleStatusChange(value: string) {
@@ -42,13 +42,13 @@ export default function StatusSelector({ className }: { className?: string }) {
         <SelectValue placeholder="상태 선택" />
       </SelectTrigger>
       <SelectContent className="min-w-[80px]">
-        <SelectItem className="cursor-pointer" value="pending">
+        <SelectItem className="cursor-pointer" value="REVIEWING">
           대기
         </SelectItem>
-        <SelectItem className="cursor-pointer" value="approved">
+        <SelectItem className="cursor-pointer" value="APPROVED">
           승인
         </SelectItem>
-        <SelectItem className="cursor-pointer" value="rejected">
+        <SelectItem className="cursor-pointer" value="REJECTED">
           반려
         </SelectItem>
       </SelectContent>

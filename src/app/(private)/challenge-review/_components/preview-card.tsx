@@ -49,7 +49,7 @@ export function PreviewCard() {
   );
   const [isActionExecuting, setIsActionExecuting] = useState(false);
   const reviewItemId = searchParams.get("reviewItemId")?.toString() || "";
-  const status = searchParams.get("status")?.toString() || "pending";
+  const status = searchParams.get("status")?.toString() || "REVIEWING";
 
   useEffect(() => {
     async function fetchReviewDetail() {
@@ -74,7 +74,9 @@ export function PreviewCard() {
 
   return (
     <ContextMenu>
-      <ContextMenuTrigger disabled={isActionExecuting || status !== "pending"}>
+      <ContextMenuTrigger
+        disabled={isActionExecuting || status !== "REVIEWING"}
+      >
         <div className="flex flex-col bg-border h-full">
           <div className="bg-background  text-center py-2 px-4 flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs font-medium">
@@ -93,7 +95,7 @@ export function PreviewCard() {
             </div>
             <div className="flex items-center gap-2">
               <Button
-                disabled={isActionExecuting || status !== "pending"}
+                disabled={isActionExecuting || status !== "REVIEWING"}
                 variant="outline"
                 size="sm"
                 onClick={() => setOpenDialog("reject")}
@@ -101,7 +103,7 @@ export function PreviewCard() {
                 반려
               </Button>
               <Button
-                disabled={isActionExecuting || status !== "pending"}
+                disabled={isActionExecuting || status !== "REVIEWING"}
                 variant="default"
                 size="sm"
                 onClick={() => setOpenDialog("approve")}

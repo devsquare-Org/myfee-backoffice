@@ -61,17 +61,17 @@ export function GlobalCommand() {
     {
       label: "대기중인 챌린지 인증 리스트",
       icon: CheckCircle,
-      path: `${ROUTES.CHALLENGE_REVIEW_LIST}?status=pending`,
+      path: `${ROUTES.CHALLENGE_REVIEW_LIST}?status=REVIEWING`,
     },
     {
       label: "승인된 챌린지 인증 리스트",
       icon: CheckCircle,
-      path: `${ROUTES.CHALLENGE_REVIEW_LIST}?status=approved`,
+      path: `${ROUTES.CHALLENGE_REVIEW_LIST}?status=APPROVED`,
     },
     {
       label: "반려된 챌린지 인증 리스트",
       icon: CheckCircle,
-      path: `${ROUTES.CHALLENGE_REVIEW_LIST}?status=rejected`,
+      path: `${ROUTES.CHALLENGE_REVIEW_LIST}?status=REJECTED`,
     },
     {
       label: "푸시 알림 발송",

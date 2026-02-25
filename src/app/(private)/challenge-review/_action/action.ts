@@ -3,7 +3,7 @@
 import {
   approveChallengeReviewParams,
   rejectChallengeReviewParams,
-} from "@/app/(private)/challenge-review/_action/req-schema";
+} from "@/app/(private)/challenge-review/_action/schema";
 import { getUserIdServer } from "@/lib/server-utils";
 import { actionClient } from "@/lib/safe-action";
 

@@ -44,7 +44,7 @@ export const menu = [
   {
     label: "챌린지 인증",
     icon: CheckCircle,
-    path: `${ROUTES.CHALLENGE_REVIEW_LIST}?status=pending`,
+    path: `${ROUTES.CHALLENGE_REVIEW_LIST}?status=REVIEWING`,
   },
   {
     label: "유저 관리",

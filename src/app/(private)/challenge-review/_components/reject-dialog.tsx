@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import * as z from "zod";
-import { rejectChallengeReviewParams } from "@/app/(private)/challenge-review/_action/req-schema";
+import { rejectChallengeReviewParams } from "@/app/(private)/challenge-review/_action/schema";
 import CustomFormLabel from "@/components/custom-form-label";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
