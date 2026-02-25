@@ -24,8 +24,6 @@ export async function fetchChallengeReviewList(
     })),
   };
 
-  console.log("fetchChallengeReviewList>>>>>>>>>>>>>>>>>>>>>>>>>", data);
-
   return {
     data: data,
     message: "챌린지 인증 목록을 성공적으로 조회하였습니다.",

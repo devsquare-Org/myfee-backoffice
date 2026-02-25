@@ -48,6 +48,7 @@ const NextErrorMessages: Record<string, string> = {};
 const MyFeeErrorMessages: Record<string, string> = {
   1009: "이메일 또는 비밀번호가 일치하지 않습니다.",
   5007: "챌린지 포인트가 부족합니다.",
+  5011: "이미 처리된 인증 게시글입니다.",
 };
 
 const defaultErrorMessage =
