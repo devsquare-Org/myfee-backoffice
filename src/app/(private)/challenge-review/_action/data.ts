@@ -16,16 +16,8 @@ export async function fetchChallengeReviewList(
     requiresAuth: true,
   });
 
-  const data = {
-    ...res,
-    contents: res.contents.map((item: Record<string, unknown>) => ({
-      ...item,
-      mainMediaUrl: `${process.env.MYFEE_CDN_BASE_URL}/${item.mainMediaUrl}`,
-    })),
-  };
-
   return {
-    data: data,
+    data: res,
     message: "챌린지 인증 목록을 성공적으로 조회하였습니다.",
   };
 }

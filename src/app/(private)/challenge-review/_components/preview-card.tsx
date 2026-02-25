@@ -43,6 +43,8 @@ export function PreviewCard({ reviewItem, onRefreshAction }: Props) {
   if (!reviewItem) return <EmptyPreviewCard />;
 
   const reviewId = reviewItem.feedId.toString();
+  const mediaRatioClass =
+    reviewItem.ratio === "RATIO_3_4" ? "aspect-[3/4]" : "aspect-square";
 
   return (
     <ContextMenu>
@@ -91,11 +93,7 @@ export function PreviewCard({ reviewItem, onRefreshAction }: Props) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div
-              className="
-            w-[375px] mx-auto shadow-[0_0_10px_0_rgba(0,0,0,0.1)] dark:shadow-[0_0_10px_0_rgba(255,255,255,0.1)] rounded-xl bg-background max-h-[564px] overflow-y-auto
-          "
-            >
+            <div className="w-full max-w-[320px] mx-auto shadow-[0_0_10px_0_rgba(0,0,0,0.1)] dark:shadow-[0_0_10px_0_rgba(255,255,255,0.1)] rounded-xl bg-background max-h-[564px] overflow-y-auto">
               <div className="flex items-center justify-between px-4 py-3">
                 <div className="flex items-center gap-2">
                   <Avatar>
@@ -109,13 +107,15 @@ export function PreviewCard({ reviewItem, onRefreshAction }: Props) {
                 </div>
               </div>
               <div>
-                <div className="relative">
+                <div
+                  className={`relative w-full max-w-[320px] mx-auto ${mediaRatioClass}`}
+                >
                   <Image
                     src={reviewItem.mainMediaUrl}
                     alt="preview"
-                    width={320}
-                    height={320}
-                    className="aspect-square w-full"
+                    fill
+                    sizes="(max-width: 320px) 100vw, 320px"
+                    className="object-cover"
                   />
                 </div>
                 <div className="bg-[#046A63] px-4 py-3 flex items-center justify-between text-white">

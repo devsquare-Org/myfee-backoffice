@@ -1,4 +1,14 @@
 {
+  "window.commandCenter": true,
+  "workbench.colorTheme": "GitHub Dark Colorblind (Beta)",
+  "workbench.tree.indent": 15,
+  "workbench.tree.renderIndentGuides": "always",
+  "editor.fontSize": 16,
+  "workbench.colorCustomizations": {
+    "tree.indentGuidesStroke": "#05ef3c",
+    "editorIndentGuide.activeBackground": "#05ef3c"
+  },
+  "workbench.iconTheme": "material-icon-theme",
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.requireConfig": false,
