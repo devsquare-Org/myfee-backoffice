@@ -5,7 +5,6 @@ import {
   challengeReviewListParams,
 } from "@/app/(private)/challenge-review/_action/req-schema";
 import { getUserIdServer } from "@/lib/server-utils";
-import wipManager from "@/module/wip-manager";
 import z from "zod";
 
 const reviewList = [
@@ -137,11 +136,6 @@ export async function fetchChallengeReviewDetail(
   const userId = await getUserIdServer();
 
   if (!userId) throw new Error("userId가 없습니다.");
-
-  await wipManager.addItem({
-    reviewItemId: Number(params.id),
-    adminId: userId,
-  });
 
   return {
     data: review,

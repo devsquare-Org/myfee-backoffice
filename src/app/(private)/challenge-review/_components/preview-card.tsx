@@ -29,7 +29,6 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { TooltipTrigger } from "@/components/ui/tooltip";
 import { TooltipContent } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { deleteWipItemsAction } from "@/app/(private)/challenge-review/_action/action";
 
 type ReviewItem = {
   id: number;
@@ -67,15 +66,6 @@ export function PreviewCard() {
     }
 
     fetchReviewDetail();
-  }, [reviewItemId]);
-
-  useEffect(() => {
-    return () => {
-      if (!reviewItemId) return;
-      deleteWipItemsAction({
-        reviewItemId: Number(reviewItemId),
-      });
-    };
   }, [reviewItemId]);
 
   if (isLoading) return <ReviewDetailSkeleton />;

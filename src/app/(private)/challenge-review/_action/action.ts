@@ -2,26 +2,16 @@
 
 import {
   approveChallengeReviewParams,
-  deleteWipItemsParams,
   rejectChallengeReviewParams,
 } from "@/app/(private)/challenge-review/_action/req-schema";
 import { getUserIdServer } from "@/lib/server-utils";
 import { actionClient } from "@/lib/safe-action";
-import wipManager from "@/module/wip-manager";
 
 export const approveChallengeReviewAction = actionClient
   .inputSchema(approveChallengeReviewParams)
   .action(async ({ parsedInput }) => {
     const userId = await getUserIdServer();
     if (!userId) throw new Error("userId가 없습니다.");
-
-    // myfee server 요청 전 세션 상태 업데이트
-    await wipManager.updateItem({
-      reviewItemId: Number(parsedInput.id),
-      adminId: userId,
-      status: "reviewed",
-      completedAt: new Date().toISOString(),
-    });
 
     try {
       // TODO: myfee server 요청
@@ -52,14 +42,6 @@ export const rejectChallengeReviewAction = actionClient
     const userId = await getUserIdServer();
     if (!userId) throw new Error("userId가 없습니다.");
 
-    // myfee server 요청 전 세션 상태 업데이트
-    await wipManager.updateItem({
-      reviewItemId: Number(parsedInput.id),
-      adminId: userId,
-      status: "reviewed",
-      completedAt: new Date().toISOString(),
-    });
-
     try {
       // TODO: myfee server 요청
       await new Promise((resolve) => setTimeout(resolve, 600));
@@ -81,10 +63,4 @@ export const rejectChallengeReviewAction = actionClient
     }
 
     return { message: "인증 요청을 반려했습니다." };
-  });
-
-export const deleteWipItemsAction = actionClient
-  .inputSchema(deleteWipItemsParams)
-  .action(async ({ parsedInput }) => {
-    await wipManager.removeItem(parsedInput);
   });

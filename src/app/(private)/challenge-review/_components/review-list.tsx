@@ -54,78 +54,16 @@ export function ReviewList({ reviewList }: Props) {
     replace(`${pathname}?${params.toString()}`);
   }
 
-  // 리뷰 아이템의 UI 상태를 한 번에 계산하는 함수
-  // function getReviewItemUIState(itemId: number) {
-  //   const wipItem = findWipItem(itemId);
-  //   const isSelected = reviewItemId === itemId.toString();
-
-  //   if (!wipItem) {
-  //     return {
-  //       statusText: null,
-  //       statusColor: null,
-  //       isClickable: true,
-  //       buttonStyle: isSelected
-  //         ? "flex items-start gap-2 border rounded-md px-4 py-3 transition-colors mb-2 relative bg-accent"
-  //         : "flex items-start gap-2 border rounded-md px-4 py-3 transition-colors mb-2 relative cursor-pointer bg-accent/20 hover:bg-accent",
-  //     };
-  //   }
-
-  //   const currentUserId = getUserIdClient();
-  //   const isOwnItem = wipItem.admin_id === currentUserId;
-  //   const isViewing = wipItem.status === "viewing";
-  //   const isReviewed = wipItem.status === "reviewed";
-  //   const shouldShowStatus = !(isOwnItem && isViewing);
-  //   const clickable = (isOwnItem && isViewing) || (!isViewing && !isReviewed);
-
-  //   // 상태 텍스트
-  //   let statusText = null;
-  //   if (shouldShowStatus) {
-  //     if (isViewing) statusText = "보는중";
-  //     else if (isReviewed) statusText = "검수 완료";
-  //   }
-
-  //   // 상태 색상
-  //   let statusColor = null;
-  //   if (shouldShowStatus) {
-  //     if (isViewing) statusColor = "bg-orange-100 text-orange-800";
-  //     else if (isReviewed) statusColor = "bg-green-100 text-green-800";
-  //   }
-
-  //   // 버튼 스타일
-  //   const baseClass =
-  //     "flex items-start gap-2 border rounded-md px-4 py-3 transition-colors mb-2 relative";
-  //   let buttonStyle = baseClass;
-  //   if (isSelected) {
-  //     buttonStyle += " bg-accent";
-  //   } else if (clickable) {
-  //     buttonStyle += " cursor-pointer bg-accent/20 hover:bg-accent";
-  //   } else {
-  //     buttonStyle += " cursor-not-allowed bg-accent/20 opacity-50";
-  //   }
-
-  //   return {
-  //     statusText,
-  //     statusColor,
-  //     isClickable: clickable,
-  //     buttonStyle,
-  //   };
-  // }
-
   return (
     <div ref={scrollContainerRef} className="h-full overflow-y-auto">
       <StatusLabel status={status} length={reviewList.length} />
       {reviewList.map((review) => {
-        // const uiState = getReviewItemUIState(review.id);
-
         return (
           <div key={review.id} className="relative">
             <div
               onClick={() => {
-                // if (uiState.isClickable) {
                 selectReviewItem(review.id.toString());
-                // }
               }}
-              // className={uiState.buttonStyle}
             >
               <div className="flex flex-col gap-1 flex-1">
                 <div className="flex items-center justify-between">
@@ -141,13 +79,6 @@ export function ReviewList({ reviewList }: Props) {
                 </p>
               </div>
             </div>
-            {/* {uiState.statusText && (
-              <div
-                className={`absolute top-2 right-2 text-[10px] px-2 py-1 rounded-full font-medium ${uiState.statusColor}`}
-              >
-                {uiState.statusText}
-              </div>
-            )} */}
           </div>
         );
       })}
