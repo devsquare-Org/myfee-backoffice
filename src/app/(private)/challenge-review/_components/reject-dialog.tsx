@@ -6,13 +6,13 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useAction } from "next-safe-action/hooks";
-import { rejectChallengeReviewAction } from "@/app/(private)/challenge-review/_action/action";
+import { challengeReviewAction } from "@/app/(private)/challenge-review/_action/action";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import * as z from "zod";
-import { rejectChallengeReviewParams } from "@/app/(private)/challenge-review/_action/schema";
+import { challengeReviewParams } from "@/app/(private)/challenge-review/_action/schema";
 import CustomFormLabel from "@/components/custom-form-label";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
@@ -30,7 +30,9 @@ import { Loader2 } from "lucide-react";
 import { CustomAlert } from "@/components/custom-alert";
 
 type Props = {
-  reviewId: string;
+  challengeId: string;
+  feedId: string;
+  memberId: number;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   setIsActionExecuting: (isActionExecuting: boolean) => void;
@@ -38,14 +40,16 @@ type Props = {
 };
 
 export function RejectDialog({
-  reviewId,
+  challengeId,
+  feedId,
+  memberId,
   isOpen,
   setIsOpen,
   setIsActionExecuting,
   onRefreshAction,
 }: Props) {
   const [isDirectInput, setIsDirectInput] = useState(false);
-  const { execute, isExecuting } = useAction(rejectChallengeReviewAction, {
+  const { execute, isExecuting } = useAction(challengeReviewAction, {
     onSuccess: ({ data }) => {
       toast.success(data?.message);
       setIsOpen(false);
@@ -64,16 +68,25 @@ export function RejectDialog({
 
   function handleReject() {
     setIsActionExecuting(isExecuting);
-    execute({ id: reviewId, reason: form.getValues("reason") });
+    execute({
+      challengeId: challengeId,
+      feedId: feedId,
+      memberId: memberId,
+      review: "REJECTED",
+      note: form.getValues("note"),
+    });
     setIsActionExecuting(isExecuting);
   }
 
-  const form = useForm<z.infer<typeof rejectChallengeReviewParams>>({
-    resolver: zodResolver(rejectChallengeReviewParams),
+  const form = useForm<z.infer<typeof challengeReviewParams>>({
+    resolver: zodResolver(challengeReviewParams),
     mode: "onChange",
     defaultValues: {
-      id: reviewId,
-      reason: undefined,
+      challengeId: challengeId,
+      feedId: feedId,
+      memberId: memberId,
+      review: "REJECTED",
+      note: "",
     },
   });
 
@@ -99,7 +112,7 @@ export function RejectDialog({
           onClick={() => {
             const newValue = !isDirectInput;
             setIsDirectInput(newValue);
-            form.resetField("reason");
+            form.resetField("note");
           }}
         >
           <Label htmlFor="airplane-mode">직접 입력</Label>
@@ -107,7 +120,7 @@ export function RejectDialog({
             checked={isDirectInput}
             onCheckedChange={(checked) => {
               setIsDirectInput(checked === true);
-              form.resetField("reason");
+              form.resetField("note");
             }}
           />
         </div>
@@ -115,10 +128,10 @@ export function RejectDialog({
         <Form {...form}>
           <FormField
             control={form.control}
-            name="reason"
+            name="note"
             render={({ field }) => (
               <FormItem>
-                <CustomFormLabel error={form.formState.errors.reason}>
+                <CustomFormLabel error={form.formState.errors.note}>
                   사유
                 </CustomFormLabel>
                 <FormControl>

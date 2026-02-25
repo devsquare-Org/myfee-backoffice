@@ -167,16 +167,20 @@ export function PreviewCard({ reviewItem, onRefreshAction }: Props) {
       </ContextMenuContent>
 
       <ApprovedDialog
+        challengeId={reviewItem.challengeId.toString()}
+        feedId={reviewId}
+        memberId={reviewItem.memberId}
         setIsActionExecuting={setIsActionExecuting}
-        reviewId={reviewId}
         isOpen={openDialog === "approve"}
         setIsOpen={(isOpen) => setOpenDialog(isOpen ? "approve" : null)}
         onRefreshAction={onRefreshAction}
       />
 
       <RejectDialog
+        challengeId={reviewItem.challengeId.toString()}
+        feedId={reviewId}
+        memberId={reviewItem.memberId}
         setIsActionExecuting={setIsActionExecuting}
-        reviewId={reviewId}
         isOpen={openDialog === "reject"}
         setIsOpen={(isOpen) => setOpenDialog(isOpen ? "reject" : null)}
         onRefreshAction={onRefreshAction}

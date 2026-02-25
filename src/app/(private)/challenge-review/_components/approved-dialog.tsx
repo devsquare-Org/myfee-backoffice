@@ -6,14 +6,16 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useAction } from "next-safe-action/hooks";
-import { approveChallengeReviewAction } from "@/app/(private)/challenge-review/_action/action";
+import { challengeReviewAction } from "@/app/(private)/challenge-review/_action/action";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { CustomAlert } from "@/components/custom-alert";
 
 type Props = {
-  reviewId: string;
+  challengeId: string;
+  feedId: string;
+  memberId: number;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   setIsActionExecuting: (isActionExecuting: boolean) => void;
@@ -21,13 +23,15 @@ type Props = {
 };
 
 export function ApprovedDialog({
-  reviewId,
+  challengeId,
+  feedId,
+  memberId,
   isOpen,
   setIsOpen,
   setIsActionExecuting,
   onRefreshAction,
 }: Props) {
-  const { execute, isExecuting } = useAction(approveChallengeReviewAction, {
+  const { execute, isExecuting } = useAction(challengeReviewAction, {
     onSuccess: ({ data }) => {
       toast.success(data?.message);
       setIsOpen(false);
@@ -44,7 +48,13 @@ export function ApprovedDialog({
 
   function handleApprove() {
     setIsActionExecuting(isExecuting);
-    execute({ id: reviewId });
+    execute({
+      challengeId: challengeId,
+      feedId: feedId,
+      memberId: memberId,
+      review: "APPROVED",
+      note: "승인 처리",
+    });
     setIsActionExecuting(isExecuting);
   }
 
