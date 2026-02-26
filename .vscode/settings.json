@@ -3,7 +3,7 @@
   "workbench.colorTheme": "GitHub Dark Colorblind (Beta)",
   "workbench.tree.indent": 15,
   "workbench.tree.renderIndentGuides": "always",
-  "editor.fontSize": 16,
+  "editor.fontSize": 15,
   "workbench.colorCustomizations": {
     "tree.indentGuidesStroke": "#05ef3c",
     "editorIndentGuide.activeBackground": "#05ef3c"
