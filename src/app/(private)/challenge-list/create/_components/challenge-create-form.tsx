@@ -37,7 +37,7 @@ export default function ChallengeCreateForm() {
   }
 
   useEffect(() => {
-    console.log(form.formState.errors);
+    console.log("ERRORS", form.formState.errors);
     console.log(form.getValues());
   }, [form.formState.errors]);
 
@@ -51,7 +51,7 @@ export default function ChallengeCreateForm() {
 
           <CertSettingSection form={form} />
 
-          <WarningSettingSection />
+          <WarningSettingSection form={form} />
 
           <Button type="submit" disabled={isExecuting}>
             등록하기

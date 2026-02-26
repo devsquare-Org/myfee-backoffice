@@ -39,7 +39,7 @@ export default function CertSettingSection({ form }: Props) {
 
   return (
     <div className="rounded-lg p-6 border">
-      <Label className="text-lg font-semibold mb-10">인증 방법 작성</Label>
+      <Label className="text-lg font-semibold mb-6">인증 방법 작성</Label>
 
       <div className="space-y-6">
         <FormField

@@ -81,19 +81,23 @@ export const createChallengeParams = z
       }),
 
     // 주의사항
-    warnings: z.array(
-      z.object({
-        paragraph: z.number().min(1, "주의사항을 입력해주세요."),
-        title: z.string().min(1, "주의사항 제목을 입력해주세요."),
-        subTitle: z.string().min(1, "주의사항 부제목을 입력해주세요."),
-        contents: z.array(
-          z.object({
-            order: z.number().min(1, "주의사항 순서를 입력해주세요."),
-            content: z.string().min(1, "주의사항 내용을 입력해주세요."),
-          })
-        ),
-      })
-    ),
+    warnings: z
+      .array(
+        z.object({
+          paragraph: z.number().min(1, "주의사항을 입력해주세요."),
+          title: z.string().min(1, "제목을 입력해주세요."),
+          subTitle: z.string().min(1, "부제목을 입력해주세요.").optional(),
+          contents: z
+            .array(
+              z.object({
+                order: z.number().min(1, "순서를 입력해주세요."),
+                content: z.string().min(1, "내용을 입력해주세요."),
+              })
+            )
+            .min(1, "내용을 입력해주세요."),
+        })
+      )
+      .optional(),
 
     // -------- 기간 타입(TERM) 필드 --------
     // 챌린지 기간(일)

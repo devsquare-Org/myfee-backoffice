@@ -76,7 +76,7 @@ export default function BasicSection({ form }: Props) {
 
   return (
     <div className="rounded-lg p-6 border">
-      <Label className="text-lg font-semibold mb-10">기본 정보</Label>
+      <Label className="text-lg font-semibold mb-6">기본 정보</Label>
 
       <div className="flex gap-8 items-start">
         <FormField
