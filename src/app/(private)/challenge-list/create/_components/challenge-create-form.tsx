@@ -49,7 +49,7 @@ export default function ChallengeCreateForm() {
 
           <ConditionSettingSection />
 
-          <CertSettingSection />
+          <CertSettingSection form={form} />
 
           <WarningSettingSection />
 
