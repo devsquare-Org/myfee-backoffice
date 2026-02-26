@@ -36,7 +36,14 @@ export const createChallengeParams = z
 
     // 해시태그
     hashtags: z
-      .array(z.object({ name: z.string().min(1, "해시태그를 입력해주세요.") }))
+      .array(
+        z.object({
+          name: z
+            .string()
+            .min(1, "해시태그를 입력해주세요.")
+            .max(20, "해시태그는 20자 이하로 입력해주세요."),
+        })
+      )
       .min(1, "해시태그를 입력해주세요.")
       .max(5, "해시태그는 최대 5개까지만 등록 가능합니다."),
 

@@ -302,7 +302,14 @@ export default function BasicSection({ form }: Props) {
 
           <FormItem>
             <CustomFormLabel
-              error={form.formState.errors.hashtags as FieldError | undefined}
+              error={(() => {
+                const err = form.formState.errors.hashtags;
+                if (!err) return undefined;
+                if ("message" in err) return err as unknown as FieldError;
+                if (Array.isArray(err))
+                  return err.find((item) => item?.name)?.name;
+                return undefined;
+              })()}
             >
               태그
             </CustomFormLabel>
@@ -316,14 +323,15 @@ export default function BasicSection({ form }: Props) {
               onKeyDown={handleHashtagKeyDown}
               placeholder={
                 isFull
-                  ? "태그는 최대 5개까지 추가할 수 있습니다."
+                  ? `최대 갯수인 ${MAX_HASHTAGS}개를 모두 입력했어요.`
                   : "태그를 입력 후 Enter를 눌러주세요."
               }
               disabled={isFull}
             />
 
             <p className="text-xs text-muted-foreground">
-              최대 {MAX_HASHTAGS}개의 태그를 추가할 수 있어요.
+              태그는 최대 20자 이내, 최대 {MAX_HASHTAGS}개의 태그를 추가할 수
+              있어요.
             </p>
 
             {fields.length > 0 && (
