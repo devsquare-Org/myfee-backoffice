@@ -1,24 +1,63 @@
-import { CreateChallengeProvider } from "../lib/use-create";
 import BasicSection from "./basic-section";
 import ConditionSettingSection from "./condition-setting-section";
 import CertSettingSection from "./cert-setting-section";
 import WarningSettingSection from "./warning-setting-section";
+import { useAction } from "next-safe-action/hooks";
+import { challengeCreateAction } from "@/app/(private)/challenge-list/_action/action";
+import { Form } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { createChallengeParams } from "@/app/(private)/challenge-list/_action/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import z from "zod";
+import { useEffect } from "react";
 
 export default function ChallengeCreateForm() {
-  // hook-form과 zod, useAction 사용해서 서버액션으로 전송
-  // zod refine 사용해서 validation 체크
-  // zod refine 사용해서 에러 객체 반환
-  // 모든 필드 validation 성공하면 서버 액션 호출
+  const { execute, isExecuting } = useAction(challengeCreateAction);
+
+  const form = useForm<z.infer<typeof createChallengeParams>>({
+    resolver: zodResolver(createChallengeParams),
+    defaultValues: {
+      title: "",
+      startDate: "",
+      endDate: "",
+      description: "",
+      hashtags: [],
+      rejoinable: false,
+      isMidPoint: false,
+      participationPoint: 0,
+      completionPoint: 0,
+      warnings: [],
+    },
+  });
+
+  function onSubmit() {
+    if (isExecuting) return;
+    execute(form.getValues());
+  }
+
+  useEffect(() => {
+    console.log(form.formState.errors);
+    console.log(form.getValues());
+  }, [form.formState.errors]);
 
   return (
-    <div className="space-y-10 max-w-screen-lg">
-      <BasicSection />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="space-y-10 max-w-screen-lg">
+          <BasicSection form={form} />
 
-      <ConditionSettingSection />
+          <ConditionSettingSection />
 
-      <CertSettingSection />
+          <CertSettingSection />
 
-      <WarningSettingSection />
-    </div>
+          <WarningSettingSection />
+
+          <Button type="submit" disabled={isExecuting}>
+            등록하기
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

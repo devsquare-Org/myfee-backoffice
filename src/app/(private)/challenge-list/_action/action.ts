@@ -1,5 +1,5 @@
+import { createChallengeParams } from "@/app/(private)/challenge-list/_action/schema";
 import { actionClient } from "@/lib/safe-action";
-import { createChallengeParams } from "./schema";
 
 export const challengeCreateAction = actionClient
   .inputSchema(createChallengeParams)
