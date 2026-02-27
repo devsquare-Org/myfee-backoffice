@@ -56,6 +56,7 @@ export default function BasicSection({ form }: Props) {
 
   const MAX_HASHTAGS = 5;
   const isFull = fields.length >= MAX_HASHTAGS;
+  const startDate = form.watch("startDate");
 
   function handleHashtagKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.nativeEvent.isComposing) return;
@@ -270,7 +271,11 @@ export default function BasicSection({ form }: Props) {
                             date ? format(date, "yyyy-MM-dd") : ""
                           );
                         }}
-                        disabled={{ before: startOfDay(new Date()) }}
+                        disabled={{
+                          before: startDate
+                            ? startOfDay(new Date(startDate))
+                            : startOfDay(new Date()),
+                        }}
                       />
                     </PopoverContent>
                   </Popover>
