@@ -23,6 +23,9 @@ export default async function ChallengeList() {
               <TableHead>챌린지명</TableHead>
               <TableHead>내용</TableHead>
               <TableHead>타입</TableHead>
+              <TableHead>참여 포인트</TableHead>
+              <TableHead>중간 포인트</TableHead>
+              <TableHead>완료 포인트</TableHead>
               <TableHead>시작일</TableHead>
               <TableHead>종료일</TableHead>
               <TableHead>상태</TableHead>
@@ -34,6 +37,13 @@ export default async function ChallengeList() {
                 <TableCell>{challenge.title}</TableCell>
                 <TableCell>{challenge.content}</TableCell>
                 <TableCell>{getChallengeType(challenge.type)}</TableCell>
+                <TableCell>
+                  {challenge.participationPoint.toLocaleString()}P
+                </TableCell>
+                <TableCell>{challenge.midPoint?.toLocaleString()}P</TableCell>
+                <TableCell>
+                  {challenge.completionPoint.toLocaleString()}P
+                </TableCell>
                 <TableCell>{challenge.startDate}</TableCell>
                 <TableCell>{challenge.endDate}</TableCell>
                 <TableCell>{getChallengeStatus(challenge.status)}</TableCell>

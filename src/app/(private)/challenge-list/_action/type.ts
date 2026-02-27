@@ -7,4 +7,7 @@ export type ChallengeListResponse = {
   startDate: string;
   endDate: string;
   status: "PENDING" | "IN_PROGRESS" | "COMPLETED" | "TERMINATED";
+  participationPoint: number;
+  midPoint: number | null;
+  completionPoint: number;
 }[];
