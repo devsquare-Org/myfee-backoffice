@@ -40,14 +40,8 @@ export default function ChallengeCreateForm() {
   });
 
   function onSubmit() {
-    if (isExecuting) return;
     execute(form.getValues());
   }
-
-  useEffect(() => {
-    console.log("VALUES", form.getValues());
-    console.log("ERRORS", form.formState.errors);
-  }, [form.formState.errors]);
 
   return (
     <Tabs defaultValue="add">
@@ -67,9 +61,7 @@ export default function ChallengeCreateForm() {
 
               <WarningSettingSection form={form} />
 
-              <Button type="submit" disabled={isExecuting}>
-                등록하기
-              </Button>
+              <Button type="submit">등록하기</Button>
             </div>
           </TabsContent>
         </form>
