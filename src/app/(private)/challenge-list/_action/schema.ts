@@ -61,19 +61,19 @@ export const createChallengeParams = z
     // 재참여 가능 여부
     rejoinable: z.boolean({ message: "재참여 가능 여부를 선택해주세요." }),
 
-    // 참여 포인트
-    participationPoint: z.number().min(1, "참여 포인트를 입력해주세요."),
+    // 참여 포인트 (1 이상)
+    participationPoint: z.number().min(1, "참여 포인트는 1 이상이어야 합니다."),
 
     // 중간포인트 지급 여부
     isMidPoint: z.boolean({
       message: "중간포인트 지급 여부를 선택해주세요.",
     }),
 
-    // 중간 포인트
+    // 중간 포인트 - isMidPoint ON일 때 필수 (superRefine)
     midPoint: z.number().min(1, "중간 포인트를 입력해주세요.").optional(),
 
-    // 완주 포인트
-    completionPoint: z.number().min(1, "완료 포인트를 입력해주세요."),
+    // 완주 포인트 (1 이상)
+    completionPoint: z.number().min(1, "완료 포인트는 1 이상이어야 합니다."),
 
     // 인증 방법 이미지
     certImage: z
@@ -107,27 +107,44 @@ export const createChallengeParams = z
       .optional(),
 
     // -------- 기간 타입(TERM) 필드 --------
-    // 챌린지 기간(일)
-    termChallengePeriod: z.number().optional(),
+    // 폼에서 빈 값 시 0을 보내므로 min(1)이 검증 (condition-setting-section onChange)
+    // optional: type이 WEEKLY일 때 검증 스킵
+    termChallengePeriod: z
+      .number()
+      .min(1, "챌린지 기간은 최소 1일입니다.")
+      .max(90, "챌린지 기간(일)은 최대 90일입니다.")
+      .optional(),
 
-    // 인증 횟수(기간 동안 필요한 인증 횟수)
-    termNumOfCert: z.number().optional(),
+    termNumOfCert: z
+      .number()
+      .min(1, "총 인증 횟수는 최소 1회입니다.")
+      .optional(),
 
-    // 하루 인증 횟수 제한
-    limitsPerDay: z.number().optional(),
+    limitsPerDay: z
+      .number()
+      .min(1, "하루 인증 제한 횟수를 입력해주세요.")
+      .max(5, "최대 5회까지 설정 가능합니다.")
+      .optional(),
 
-    // 중간 포인트 지급 조건(며칠 동안)
+    // 중간 포인트 지급 조건(며칠 동안) - isMidPoint ON일 때 필수 (superRefine)
     termsOfPayment: z.number().optional(),
 
-    // 중간 포인트 지급 조건(성공 횟수)
+    // 중간 포인트 지급 조건(성공 횟수) - isMidPoint ON일 때 필수 (superRefine)
     termsNumOfSuccess: z.number().optional(),
 
     // -------- 주간 타입(WEEKLY) 필드 --------
-    // 챌린지 기간(주)
-    weeklyChallengePeriod: z.number().optional(),
+    // 폼에서 빈 값 시 0을 보내므로 min 검증 (condition-setting-section onChange)
+    weeklyChallengePeriod: z
+      .number()
+      .min(2, "챌린지 기간(주)은 최소 2주입니다.")
+      .max(12, "챌린지 기간(주)는 최대 12주입니다.")
+      .optional(),
 
-    // 인증 일수(주간 동안 필요한 인증 일수)
-    weeklyNumOfDays: z.number().optional(),
+    weeklyNumOfDays: z
+      .number()
+      .min(1, "주간 인증 일수를 입력해주세요.")
+      .max(7, "주간 인증 일수는 최대 7일 이하여야 합니다.")
+      .optional(),
 
     // 필요 인증 횟수(하루 동안 필요한 인증 횟수)
     dailyNumOfCert: z.number().optional(),
@@ -141,6 +158,7 @@ export const createChallengeParams = z
       startDate,
       endDate,
       type,
+      isMidPoint,
       termChallengePeriod,
       termNumOfCert,
       limitsPerDay,
@@ -164,11 +182,17 @@ export const createChallengeParams = z
     const TEN_YEARS_MS = 10 * 365.25 * ONE_DAY_MS; // 윤년 고려한 10년
 
     // 종료일이 시작일보다 앞서는 경우만 에러 (당일은 diffInMs가 0이므로 통과)
+    // path는 단일 필드만 - ["endDate","startDate"]는 중첩 경로로 해석되어 error.message가 안 나옴
     if (diffInMs < 0) {
       addIssue({
         code: "custom",
         message: "종료일은 시작일보다 빠를 수 없습니다.",
-        path: ["endDate", "startDate"],
+        path: ["endDate"],
+      });
+      addIssue({
+        code: "custom",
+        message: "시작일은 종료일보다 늦을 수 없습니다.",
+        path: ["startDate"],
       });
     }
 
@@ -177,35 +201,41 @@ export const createChallengeParams = z
       addIssue({
         code: "custom",
         message: "챌린지 기간은 최대 10년을 초과할 수 없습니다.",
-        path: ["endDate", "startDate"],
+        path: ["endDate"],
+      });
+      addIssue({
+        code: "custom",
+        message: "챌린지 기간은 최대 10년을 초과할 수 없습니다.",
+        path: ["startDate"],
       });
     }
 
-    // 2. 챌린지 타입에 따른 조건부 검증
+    // 2. 챌린지 타입에 따른 조건부 검증 (필수 체크 + 교차 필드 검증)
     if (type === "TERM") {
-      // [TERM] 관련 필드 필수 및 범위 체크
+      // [TERM] 필수 체크 (범위는 기본 스키마에서 검증)
       if (!termChallengePeriod) {
         addIssue({
           code: "custom",
           message: "챌린지 기간(일)을 입력해주세요.",
-          path: ["terrmChallengePeriod"],
-        });
-      } // 최대치 체크 (값이 있을 때만 실행)
-      else if (termChallengePeriod > 90) {
-        addIssue({
-          code: "custom",
-          message: "챌린지 기간(일)은 최대 90일입니다.",
-          path: ["terrmChallengePeriod"],
+          path: ["termChallengePeriod"],
         });
       }
-
-      if (!data.termNumOfCert) {
+      if (!termNumOfCert) {
         addIssue({
           code: "custom",
           message: "총 인증 횟수를 입력해주세요.",
           path: ["termNumOfCert"],
         });
-      } else if (
+      }
+      if (!limitsPerDay) {
+        addIssue({
+          code: "custom",
+          message: "하루 인증 제한 횟수를 입력해주세요.",
+          path: ["limitsPerDay"],
+        });
+      }
+      // [TERM] 교차 필드 검증 (path는 단일 필드만 - 중첩 경로면 error.message가 안 나옴)
+      if (
         termChallengePeriod &&
         limitsPerDay &&
         termNumOfCert &&
@@ -214,52 +244,11 @@ export const createChallengeParams = z
         addIssue({
           code: "custom",
           message: "총 인증 횟수를 달성할 수 없습니다.",
-          path: ["termNumOfCert", "termChallengePeriod", "limitsPerDay"],
-        });
-      }
-
-      if (!limitsPerDay) {
-        addIssue({
-          code: "custom",
-          message: "하루 인증 제한 횟수를 입력해주세요.",
-          path: ["limitsPerDay"],
-        });
-      } else if (limitsPerDay > 5) {
-        addIssue({
-          code: "custom",
-          message: "최대 5회까지 설정 가능합니다.",
-          path: ["limitsPerDay"],
+          path: ["termNumOfCert"],
         });
       }
     } else if (type === "WEEKLY") {
-      // [WEEKLY] 관련 필드 필수 및 범위 체크
-      if (!weeklyChallengePeriod) {
-        addIssue({
-          code: "custom",
-          message: "챌린지 기간(주)을 입력해주세요.",
-          path: ["weeklyChallengePeriod"],
-        });
-      } else if (weeklyChallengePeriod > 12) {
-        addIssue({
-          code: "custom",
-          message: "챌린지 기간(주)는 최대 12주입니다.",
-          path: ["weeklyChallengePeriod"],
-        });
-      }
-
-      if (!weeklyNumOfDays) {
-        addIssue({
-          code: "custom",
-          message: "주간 인증 일수를 입력해주세요.",
-          path: ["weeklyNumOfDays"],
-        });
-      } else if (weeklyNumOfDays < 7) {
-        addIssue({
-          code: "custom",
-          message: "주간 인증 일수는 최대 7일 이하여야 합니다.",
-          path: ["weeklyNumOfDays"],
-        });
-      }
+      // [WEEKLY] 챌린지 기간/인증 일수는 기본 스키마에서 검증, dailyNumOfCert만 체크
       if (!dailyNumOfCert) {
         addIssue({
           code: "custom",
@@ -275,8 +264,18 @@ export const createChallengeParams = z
       }
     }
 
-    // 3. 기간 타입에 따른 중간 포인트 조건 검증 (midPoint가 있을 때만 체크)
-    if (type === "TERM" && midPoint !== undefined && midPoint > 0) {
+    // 3. 중간 포인트 설정 시 필수 (isMidPoint ON이면 termsOfPayment, termsNumOfSuccess, midPoint 필수)
+    if (isMidPoint) {
+      if (!midPoint || midPoint < 1) {
+        addIssue({
+          code: "custom",
+          message: "중간 지급 포인트를 입력해주세요.",
+          path: ["midPoint"],
+        });
+      }
+    }
+
+    if (isMidPoint && type === "TERM") {
       if (!termsOfPayment) {
         addIssue({
           code: "custom",
@@ -299,7 +298,7 @@ export const createChallengeParams = z
         addIssue({
           code: "custom",
           message: "성공 횟수 조건을 입력해주세요.",
-          path: ["termsOfSuccess"],
+          path: ["termsNumOfSuccess"],
         });
       }
       if (
@@ -315,7 +314,7 @@ export const createChallengeParams = z
       }
     }
 
-    if (type === "WEEKLY" && midPoint !== undefined && midPoint > 0) {
+    if (isMidPoint && type === "WEEKLY") {
       if (!weeklyNumOfCompleted) {
         addIssue({
           code: "custom",

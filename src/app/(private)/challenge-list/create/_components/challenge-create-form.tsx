@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import z from "zod";
+import { useEffect } from "react";
 
 export default function ChallengeCreateForm() {
   const { execute, isExecuting } = useAction(challengeCreateAction);
@@ -23,6 +24,13 @@ export default function ChallengeCreateForm() {
       endDate: "",
       description: "",
       hashtags: [],
+      type: "TERM",
+      termChallengePeriod: 0,
+      termNumOfCert: 0,
+      weeklyChallengePeriod: undefined,
+      weeklyNumOfDays: undefined,
+      limitsPerDay: 1,
+      dailyNumOfCert: 1,
       rejoinable: true,
       isMidPoint: false,
       participationPoint: 0,
@@ -36,6 +44,10 @@ export default function ChallengeCreateForm() {
     execute(form.getValues());
   }
 
+  useEffect(() => {
+    console.log(form.formState.errors);
+  }, [form.formState.errors]);
+
   return (
     <Tabs defaultValue="add">
       <TabsList>
@@ -47,8 +59,11 @@ export default function ChallengeCreateForm() {
           <TabsContent value="add">
             <div className="space-y-10 max-w-screen-lg pt-4">
               <BasicSection form={form} />
-              <ConditionSettingSection />
+
+              <ConditionSettingSection form={form} />
+
               <CertSettingSection form={form} />
+
               <WarningSettingSection form={form} />
 
               <Button type="submit" disabled={isExecuting}>
