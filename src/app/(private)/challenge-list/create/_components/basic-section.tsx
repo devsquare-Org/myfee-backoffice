@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, Upload, X } from "lucide-react";
-import { format } from "date-fns";
+import { format, startOfDay } from "date-fns";
 import { ko } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -213,6 +213,7 @@ export default function BasicSection({ form }: Props) {
                             date ? format(date, "yyyy-MM-dd") : ""
                           );
                         }}
+                        disabled={{ before: startOfDay(new Date()) }}
                       />
                     </PopoverContent>
                   </Popover>
@@ -269,6 +270,7 @@ export default function BasicSection({ form }: Props) {
                             date ? format(date, "yyyy-MM-dd") : ""
                           );
                         }}
+                        disabled={{ before: startOfDay(new Date()) }}
                       />
                     </PopoverContent>
                   </Popover>
