@@ -7,7 +7,6 @@ import z from "zod";
 import { Input } from "@/components/ui/input";
 import CustomFormLabel from "@/components/custom-form-label";
 import { createChallengeParams } from "@/app/(private)/challenge-list/_action/schema";
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";

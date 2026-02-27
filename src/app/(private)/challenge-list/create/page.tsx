@@ -1,5 +1,3 @@
-"use client";
-
 import { PageHeader } from "@/components/page-header";
 import ChallengeCreateForm from "./_components/challenge-create-form";
 

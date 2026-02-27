@@ -1,3 +1,5 @@
+"use client";
+
 import BasicSection from "./basic-section";
 import ConditionSettingSection from "./condition-setting-section";
 import CertSettingSection from "./cert-setting-section";
@@ -11,7 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import z from "zod";
-import { useEffect } from "react";
 
 export default function ChallengeCreateForm() {
   const { execute, isExecuting } = useAction(challengeCreateAction);
@@ -61,7 +62,9 @@ export default function ChallengeCreateForm() {
 
               <WarningSettingSection form={form} />
 
-              <Button type="submit">등록하기</Button>
+              <Button type="submit" disabled={isExecuting}>
+                등록하기
+              </Button>
             </div>
           </TabsContent>
         </form>
