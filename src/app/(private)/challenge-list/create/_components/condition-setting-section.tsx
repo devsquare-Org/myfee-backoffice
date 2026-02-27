@@ -472,20 +472,28 @@ export default function ConditionSettingSection({ form }: Props) {
                                 며칠 동안
                               </CustomFormLabel>
                               <FormControl>
-                                <Input
-                                  ref={ref}
-                                  type="number"
-                                  placeholder="숫자 입력"
-                                  value={value ?? ""}
-                                  onBlur={onBlur}
-                                  onChange={(e) =>
-                                    onChange(
-                                      e.target.value
-                                        ? Number(e.target.value)
-                                        : undefined
-                                    )
-                                  }
-                                />
+                                <div className="flex items-center gap-2">
+                                  <Input
+                                    ref={ref}
+                                    type="number"
+                                    placeholder="숫자 입력"
+                                    value={value ?? ""}
+                                    onBlur={onBlur}
+                                    onChange={(e) =>
+                                      onChange(
+                                        e.target.value
+                                          ? Number(e.target.value)
+                                          : undefined
+                                      )
+                                    }
+                                    aria-invalid={
+                                      !!form.formState.errors.termsOfPayment
+                                    }
+                                  />
+                                  <span className="text-sm text-muted-foreground shrink-0">
+                                    일
+                                  </span>
+                                </div>
                               </FormControl>
                             </FormItem>
                           )}
@@ -503,20 +511,28 @@ export default function ConditionSettingSection({ form }: Props) {
                                 인증 성공 횟수
                               </CustomFormLabel>
                               <FormControl>
-                                <Input
-                                  ref={ref}
-                                  type="number"
-                                  placeholder="숫자 입력"
-                                  value={value ?? ""}
-                                  onBlur={onBlur}
-                                  onChange={(e) =>
-                                    onChange(
-                                      e.target.value
-                                        ? Number(e.target.value)
-                                        : undefined
-                                    )
-                                  }
-                                />
+                                <div className="flex items-center gap-2">
+                                  <Input
+                                    ref={ref}
+                                    type="number"
+                                    placeholder="숫자 입력"
+                                    value={value ?? ""}
+                                    onBlur={onBlur}
+                                    onChange={(e) =>
+                                      onChange(
+                                        e.target.value
+                                          ? Number(e.target.value)
+                                          : undefined
+                                      )
+                                    }
+                                    aria-invalid={
+                                      !!form.formState.errors.termsNumOfSuccess
+                                    }
+                                  />
+                                  <span className="text-sm text-muted-foreground shrink-0">
+                                    회
+                                  </span>
+                                </div>
                               </FormControl>
                             </FormItem>
                           )}
