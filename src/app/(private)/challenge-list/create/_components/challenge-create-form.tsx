@@ -45,7 +45,12 @@ export default function ChallengeCreateForm() {
   }
 
   useEffect(() => {
-    console.log(form.formState.errors);
+    // TODO: 6개 필드 에러 표기 잡기
+    // TODO: superRefine 검증 후 에러 표기 테스트
+    // TODO: 서버에 데이터 전송
+
+    console.log("VALUES", form.getValues());
+    console.log("ERRORS", form.formState.errors);
   }, [form.formState.errors]);
 
   return (

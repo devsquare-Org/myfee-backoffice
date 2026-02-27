@@ -21,6 +21,7 @@ const LIMITS_PER_DAY_OPTIONS = [1, 2, 3, 4, 5] as const;
 
 export default function ConditionSettingSection({ form }: Props) {
   const type = form.watch("type");
+  const isMidPoint = form.watch("isMidPoint");
 
   useEffect(() => {
     if (type === "TERM") {
@@ -33,6 +34,26 @@ export default function ConditionSettingSection({ form }: Props) {
       form.setValue("weeklyNumOfDays", 0);
     }
   }, [type, form]);
+
+  useEffect(() => {
+    if (isMidPoint) {
+      form.setValue("midPoint", 0);
+      if (type === "TERM") {
+        form.setValue("termsOfPayment", 0);
+        form.setValue("termsNumOfSuccess", 0);
+        form.setValue("weeklyNumOfCompleted", undefined);
+      } else if (type === "WEEKLY") {
+        form.setValue("termsOfPayment", undefined);
+        form.setValue("termsNumOfSuccess", undefined);
+        form.setValue("weeklyNumOfCompleted", 0);
+      }
+    } else {
+      form.setValue("termsOfPayment", undefined);
+      form.setValue("termsNumOfSuccess", undefined);
+      form.setValue("midPoint", undefined);
+      form.setValue("weeklyNumOfCompleted", undefined);
+    }
+  }, [isMidPoint, form, type]);
 
   return (
     <Card className="p-6">
@@ -98,7 +119,7 @@ export default function ConditionSettingSection({ form }: Props) {
                           <Input
                             ref={ref}
                             type="number"
-                            placeholder="최대 90일까지 입력 가능"
+                            placeholder="숫자만 입력 가능해요"
                             value={value === 0 ? "" : (value ?? "")}
                             onBlur={onBlur}
                             onChange={(e) =>
@@ -108,12 +129,18 @@ export default function ConditionSettingSection({ form }: Props) {
                                   : Number(e.target.value)
                               )
                             }
+                            aria-invalid={
+                              !!form.formState.errors.termChallengePeriod
+                            }
                           />
                           <span className="text-sm text-muted-foreground shrink-0">
                             일
                           </span>
                         </div>
                       </FormControl>
+                      <p className="text-xs text-muted-foreground">
+                        최대 90일까지 입력 가능해요.
+                      </p>
                     </FormItem>
                   )}
                 />
@@ -132,7 +159,7 @@ export default function ConditionSettingSection({ form }: Props) {
                           <Input
                             ref={ref}
                             type="number"
-                            placeholder="기간 동안 필요한 인증 횟수"
+                            placeholder="숫자만 입력 가능해요"
                             value={value === 0 ? "" : (value ?? "")}
                             onBlur={onBlur}
                             onChange={(e) =>
@@ -142,12 +169,16 @@ export default function ConditionSettingSection({ form }: Props) {
                                   : Number(e.target.value)
                               )
                             }
+                            aria-invalid={!!form.formState.errors.termNumOfCert}
                           />
                           <span className="text-sm text-muted-foreground shrink-0">
                             회
                           </span>
                         </div>
                       </FormControl>
+                      <p className="text-xs text-muted-foreground">
+                        기간 동안 필요한 인증 횟수를 입력해주세요.
+                      </p>
                     </FormItem>
                   )}
                 />
@@ -214,6 +245,9 @@ export default function ConditionSettingSection({ form }: Props) {
                                   : Number(e.target.value)
                               )
                             }
+                            aria-invalid={
+                              !!form.formState.errors.weeklyChallengePeriod
+                            }
                           />
                           <span className="text-sm text-muted-foreground shrink-0">
                             주
@@ -247,6 +281,9 @@ export default function ConditionSettingSection({ form }: Props) {
                                   ? 0
                                   : Number(e.target.value)
                               )
+                            }
+                            aria-invalid={
+                              !!form.formState.errors.weeklyNumOfDays
                             }
                           />
                           <span className="text-sm text-muted-foreground shrink-0">
@@ -299,15 +336,15 @@ export default function ConditionSettingSection({ form }: Props) {
             name="maxParticipants"
             render={({ field: { value, onChange, onBlur, ref } }) => (
               <FormItem>
-                <Label className="text-sm font-medium">
+                <CustomFormLabel error={form.formState.errors.maxParticipants}>
                   최대 참여자 수 (옵션)
-                </Label>
+                </CustomFormLabel>
                 <FormControl>
                   <div className="flex items-center gap-2">
                     <Input
                       ref={ref}
                       type="number"
-                      placeholder="최대 1,000명까지 입력 가능"
+                      placeholder="최대 1,000명까지 입력 가능해요"
                       value={value ?? ""}
                       onBlur={onBlur}
                       onChange={(e) =>
@@ -335,7 +372,7 @@ export default function ConditionSettingSection({ form }: Props) {
               <FormItem>
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-sm font-medium">재참여 여부</Label>
+                    <CustomFormLabel>재참여 여부</CustomFormLabel>
                     <p className="text-xs text-muted-foreground mt-0.5">
                       {field.value ? (
                         <>
@@ -388,6 +425,7 @@ export default function ConditionSettingSection({ form }: Props) {
                           e.target.value === "" ? 0 : Number(e.target.value)
                         )
                       }
+                      aria-invalid={!!form.formState.errors.participationPoint}
                     />
                     <span className="text-sm text-muted-foreground shrink-0">
                       P
@@ -419,6 +457,7 @@ export default function ConditionSettingSection({ form }: Props) {
                           e.target.value === "" ? 0 : Number(e.target.value)
                         )
                       }
+                      aria-invalid={!!form.formState.errors.completionPoint}
                     />
                     <span className="text-sm text-muted-foreground shrink-0">
                       P
@@ -436,9 +475,7 @@ export default function ConditionSettingSection({ form }: Props) {
               <FormItem>
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-sm font-medium">
-                      중간 챌린지 포인트 설정
-                    </Label>
+                    <CustomFormLabel>중간 챌린지 포인트 설정</CustomFormLabel>
                     <p className="text-xs text-muted-foreground mt-0.5">
                       참여 후 조건에 따라 중간 포인트를 자동 지급할 수 있어요.
                     </p>
@@ -453,10 +490,6 @@ export default function ConditionSettingSection({ form }: Props) {
 
                 {field.value && (
                   <div className="mt-4 rounded-lg border p-4 space-y-4">
-                    <Label className="text-sm font-medium">
-                      중간 챌린지 포인트 지급 조건
-                    </Label>
-
                     {type === "TERM" && (
                       <div className="space-y-4">
                         <FormField
@@ -476,14 +509,14 @@ export default function ConditionSettingSection({ form }: Props) {
                                   <Input
                                     ref={ref}
                                     type="number"
-                                    placeholder="숫자 입력"
-                                    value={value ?? ""}
+                                    placeholder="숫자만 입력 가능해요"
+                                    value={value === 0 ? "" : (value ?? "")}
                                     onBlur={onBlur}
                                     onChange={(e) =>
                                       onChange(
-                                        e.target.value
-                                          ? Number(e.target.value)
-                                          : undefined
+                                        e.target.value === ""
+                                          ? 0
+                                          : Number(e.target.value)
                                       )
                                     }
                                     aria-invalid={
@@ -515,14 +548,14 @@ export default function ConditionSettingSection({ form }: Props) {
                                   <Input
                                     ref={ref}
                                     type="number"
-                                    placeholder="숫자 입력"
-                                    value={value ?? ""}
+                                    placeholder="숫자만 입력 가능해요"
+                                    value={value === 0 ? "" : (value ?? "")}
                                     onBlur={onBlur}
                                     onChange={(e) =>
                                       onChange(
-                                        e.target.value
-                                          ? Number(e.target.value)
-                                          : undefined
+                                        e.target.value === ""
+                                          ? 0
+                                          : Number(e.target.value)
                                       )
                                     }
                                     aria-invalid={
@@ -557,15 +590,18 @@ export default function ConditionSettingSection({ form }: Props) {
                               <Input
                                 ref={ref}
                                 type="number"
-                                placeholder="숫자 입력"
-                                value={value ?? ""}
+                                placeholder="숫자만 입력 가능해요"
+                                value={value === 0 ? "" : (value ?? "")}
                                 onBlur={onBlur}
                                 onChange={(e) =>
                                   onChange(
-                                    e.target.value
-                                      ? Number(e.target.value)
-                                      : undefined
+                                    e.target.value === ""
+                                      ? 0
+                                      : Number(e.target.value)
                                   )
+                                }
+                                aria-invalid={
+                                  !!form.formState.errors.weeklyNumOfCompleted
                                 }
                               />
                             </FormControl>
@@ -589,14 +625,14 @@ export default function ConditionSettingSection({ form }: Props) {
                               <Input
                                 ref={ref}
                                 type="number"
-                                placeholder="숫자만 입력 가능해요."
-                                value={value ?? ""}
+                                placeholder="숫자만 입력 가능해요"
+                                value={value === 0 ? "" : (value ?? "")}
                                 onBlur={onBlur}
                                 onChange={(e) =>
                                   onChange(
-                                    e.target.value
-                                      ? Number(e.target.value)
-                                      : undefined
+                                    e.target.value === ""
+                                      ? 0
+                                      : Number(e.target.value)
                                   )
                                 }
                                 aria-invalid={!!form.formState.errors.midPoint}

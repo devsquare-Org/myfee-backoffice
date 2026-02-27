@@ -156,7 +156,7 @@ export default function BasicSection({ form }: Props) {
                 </CustomFormLabel>
 
                 <FormControl>
-                  <Input {...field} placeholder="챌린지 제목을 입력해주세요." />
+                  <Input {...field} placeholder="챌린지 제목을 입력해주세요" />
                 </FormControl>
 
                 <p className="text-xs text-muted-foreground">
@@ -290,7 +290,7 @@ export default function BasicSection({ form }: Props) {
                 <FormControl>
                   <Textarea
                     {...field}
-                    placeholder="챌린지 설명을 입력해주세요."
+                    placeholder="챌린지 설명을 입력해주세요"
                   />
                 </FormControl>
 
@@ -316,6 +316,7 @@ export default function BasicSection({ form }: Props) {
             </CustomFormLabel>
 
             <Input
+              aria-invalid={!!form.formState.errors.hashtags}
               className={cn(
                 form.formState.errors.hashtags && "border-destructive"
               )}
@@ -324,8 +325,8 @@ export default function BasicSection({ form }: Props) {
               onKeyDown={handleHashtagKeyDown}
               placeholder={
                 isFull
-                  ? `최대 갯수인 ${MAX_HASHTAGS}개를 모두 입력했어요.`
-                  : "태그를 입력 후 Enter를 눌러주세요."
+                  ? `최대 갯수인 ${MAX_HASHTAGS}개를 모두 입력했어요`
+                  : "태그를 입력 후 Enter를 눌러주세요"
               }
               disabled={isFull}
             />
