@@ -25,11 +25,11 @@ export default function ConditionSettingSection({ form }: Props) {
 
   useEffect(() => {
     if (type === "TERM") {
-      form.setValue("weeklyChallengePeriod", undefined);
-      form.setValue("weeklyNumOfDays", undefined);
+      form.setValue("weeklyChallengePeriod", 0);
+      form.setValue("weeklyNumOfDays", 0);
     } else if (type === "WEEKLY") {
-      form.setValue("termChallengePeriod", undefined);
-      form.setValue("termNumOfCert", undefined);
+      form.setValue("termChallengePeriod", 0);
+      form.setValue("termNumOfCert", 0);
       form.setValue("weeklyChallengePeriod", 0);
       form.setValue("weeklyNumOfDays", 0);
     }
@@ -119,6 +119,7 @@ export default function ConditionSettingSection({ form }: Props) {
                           <Input
                             ref={ref}
                             type="number"
+                            min={0}
                             placeholder="숫자만 입력 가능해요"
                             value={value === 0 ? "" : (value ?? "")}
                             onBlur={onBlur}
@@ -159,6 +160,7 @@ export default function ConditionSettingSection({ form }: Props) {
                           <Input
                             ref={ref}
                             type="number"
+                            min={0}
                             placeholder="숫자만 입력 가능해요"
                             value={value === 0 ? "" : (value ?? "")}
                             onBlur={onBlur}
@@ -235,7 +237,8 @@ export default function ConditionSettingSection({ form }: Props) {
                           <Input
                             ref={ref}
                             type="number"
-                            placeholder="2~12주 입력 가능"
+                            min={0}
+                            placeholder="숫자만 입력 가능해요"
                             value={value === 0 ? "" : (value ?? "")}
                             onBlur={onBlur}
                             onChange={(e) =>
@@ -254,6 +257,9 @@ export default function ConditionSettingSection({ form }: Props) {
                           </span>
                         </div>
                       </FormControl>
+                      <p className="text-xs text-muted-foreground">
+                        최소 2주부터 최대 12주까지 입력 가능해요.
+                      </p>
                     </FormItem>
                   )}
                 />
@@ -265,14 +271,15 @@ export default function ConditionSettingSection({ form }: Props) {
                       <CustomFormLabel
                         error={form.formState.errors.weeklyNumOfDays}
                       >
-                        인증 일수
+                        1주 인증 일수
                       </CustomFormLabel>
                       <FormControl>
                         <div className="flex items-center gap-2">
                           <Input
                             ref={ref}
                             type="number"
-                            placeholder="1주당 필요한 인증 일수"
+                            min={0}
+                            placeholder="숫자만 입력 가능해요"
                             value={value === 0 ? "" : (value ?? "")}
                             onBlur={onBlur}
                             onChange={(e) =>
@@ -291,6 +298,9 @@ export default function ConditionSettingSection({ form }: Props) {
                           </span>
                         </div>
                       </FormControl>
+                      <p className="text-xs text-muted-foreground">
+                        최소 1일부터 최대 7일까지 입력 가능해요.
+                      </p>
                     </FormItem>
                   )}
                 />
@@ -304,7 +314,7 @@ export default function ConditionSettingSection({ form }: Props) {
                     <CustomFormLabel
                       error={form.formState.errors.dailyNumOfCert}
                     >
-                      필요 인증 횟수
+                      1일 필요 인증 횟수
                     </CustomFormLabel>
                     <FormControl>
                       <div className="flex gap-2">
@@ -417,6 +427,7 @@ export default function ConditionSettingSection({ form }: Props) {
                     <Input
                       ref={ref}
                       type="number"
+                      min={0}
                       placeholder="숫자만 입력 가능해요."
                       value={value === 0 ? "" : (value ?? "")}
                       onBlur={onBlur}
@@ -449,6 +460,7 @@ export default function ConditionSettingSection({ form }: Props) {
                     <Input
                       ref={ref}
                       type="number"
+                      min={0}
                       placeholder="숫자만 입력 가능해요."
                       value={value === 0 ? "" : (value ?? "")}
                       onBlur={onBlur}
@@ -509,6 +521,7 @@ export default function ConditionSettingSection({ form }: Props) {
                                   <Input
                                     ref={ref}
                                     type="number"
+                                    min={0}
                                     placeholder="숫자만 입력 가능해요"
                                     value={value === 0 ? "" : (value ?? "")}
                                     onBlur={onBlur}
@@ -548,6 +561,7 @@ export default function ConditionSettingSection({ form }: Props) {
                                   <Input
                                     ref={ref}
                                     type="number"
+                                    min={0}
                                     placeholder="숫자만 입력 가능해요"
                                     value={value === 0 ? "" : (value ?? "")}
                                     onBlur={onBlur}
@@ -587,23 +601,29 @@ export default function ConditionSettingSection({ form }: Props) {
                               주 인증 성공 시
                             </CustomFormLabel>
                             <FormControl>
-                              <Input
-                                ref={ref}
-                                type="number"
-                                placeholder="숫자만 입력 가능해요"
-                                value={value === 0 ? "" : (value ?? "")}
-                                onBlur={onBlur}
-                                onChange={(e) =>
-                                  onChange(
-                                    e.target.value === ""
-                                      ? 0
-                                      : Number(e.target.value)
-                                  )
-                                }
-                                aria-invalid={
-                                  !!form.formState.errors.weeklyNumOfCompleted
-                                }
-                              />
+                              <div className="flex items-center gap-2">
+                                <Input
+                                  ref={ref}
+                                  type="number"
+                                  min={0}
+                                  placeholder="숫자만 입력 가능해요"
+                                  value={value === 0 ? "" : (value ?? "")}
+                                  onBlur={onBlur}
+                                  onChange={(e) =>
+                                    onChange(
+                                      e.target.value === ""
+                                        ? 0
+                                        : Number(e.target.value)
+                                    )
+                                  }
+                                  aria-invalid={
+                                    !!form.formState.errors.weeklyNumOfCompleted
+                                  }
+                                />
+                                <span className="text-sm text-muted-foreground shrink-0">
+                                  주
+                                </span>
+                              </div>
                             </FormControl>
                           </FormItem>
                         )}
@@ -625,6 +645,7 @@ export default function ConditionSettingSection({ form }: Props) {
                               <Input
                                 ref={ref}
                                 type="number"
+                                min={0}
                                 placeholder="숫자만 입력 가능해요"
                                 value={value === 0 ? "" : (value ?? "")}
                                 onBlur={onBlur}
