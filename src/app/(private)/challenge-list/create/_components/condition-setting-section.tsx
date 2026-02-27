@@ -314,7 +314,7 @@ export default function ConditionSettingSection({ form }: Props) {
                     <CustomFormLabel
                       error={form.formState.errors.dailyNumOfCert}
                     >
-                      1일 필요 인증 횟수
+                      하루 필요 인증 횟수
                     </CustomFormLabel>
                     <FormControl>
                       <div className="flex gap-2">
@@ -598,7 +598,7 @@ export default function ConditionSettingSection({ form }: Props) {
                             <CustomFormLabel
                               error={form.formState.errors.weeklyNumOfCompleted}
                             >
-                              주 인증 성공 시
+                              몇 주 동안 성공 시
                             </CustomFormLabel>
                             <FormControl>
                               <div className="flex items-center gap-2">
