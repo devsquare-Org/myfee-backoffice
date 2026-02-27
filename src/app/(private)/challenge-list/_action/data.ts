@@ -39,8 +39,6 @@ export async function fetchChallengeList(): Promise<{
     })
   );
 
-  console.log(challengeList);
-
   return {
     data: challengeList,
     message: "챌린지 목록을 성공적으로 조회하였습니다.",

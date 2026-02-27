@@ -16,6 +16,7 @@ import { createChallengeParams } from "@/app/(private)/challenge-list/_action/sc
 import { Upload, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { Card } from "@/components/ui/card";
 
 type Props = {
   form: UseFormReturn<z.infer<typeof createChallengeParams>>;
@@ -38,7 +39,7 @@ export default function CertSettingSection({ form }: Props) {
   }
 
   return (
-    <div className="rounded-lg p-6 border">
+    <Card>
       <Label className="text-lg font-semibold mb-6">인증 방법 작성</Label>
 
       <div className="space-y-6">
@@ -74,7 +75,7 @@ export default function CertSettingSection({ form }: Props) {
               ) : (
                 <FormLabel
                   className={cn(
-                    "border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer w-full aspect-[4/3] dark:bg-input/30",
+                    "border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer w-full aspect-[4/3] bg-background dark:bg-input/30",
                     form.formState.errors.certImage && "border-destructive"
                   )}
                 >
@@ -105,6 +106,6 @@ export default function CertSettingSection({ form }: Props) {
           )}
         />
       </div>
-    </div>
+    </Card>
   );
 }

@@ -11,6 +11,7 @@ import { createChallengeParams } from "@/app/(private)/challenge-list/_action/sc
 import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Card } from "@/components/ui/card";
 
 type FormValues = z.infer<typeof createChallengeParams>;
 
@@ -52,7 +53,7 @@ export default function WarningSettingSection({ form }: Props) {
   }
 
   return (
-    <div className="rounded-lg p-6 border">
+    <Card>
       <Label className="text-lg font-semibold mb-6">주의사항 작성</Label>
 
       <div className="space-y-0 mb-6">
@@ -152,7 +153,7 @@ export default function WarningSettingSection({ form }: Props) {
         <Plus className="size-4" />
         항목 추가
       </Button>
-    </div>
+    </Card>
   );
 }
 
@@ -175,14 +176,9 @@ function WarningContents({
   function removeContent(index: number) {
     remove(index);
     setTimeout(() => {
-      const contents = form.getValues(
-        `warnings.${paragraphIndex}.contents`
-      );
+      const contents = form.getValues(`warnings.${paragraphIndex}.contents`);
       contents?.forEach((_, i) => {
-        form.setValue(
-          `warnings.${paragraphIndex}.contents.${i}.order`,
-          i + 1
-        );
+        form.setValue(`warnings.${paragraphIndex}.contents.${i}.order`, i + 1);
       });
     }, 0);
   }

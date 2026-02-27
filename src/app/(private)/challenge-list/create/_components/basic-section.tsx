@@ -26,6 +26,7 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { Card } from "@/components/ui/card";
 
 type Props = {
   form: UseFormReturn<z.infer<typeof createChallengeParams>>;
@@ -75,7 +76,7 @@ export default function BasicSection({ form }: Props) {
   }
 
   return (
-    <div className="rounded-lg p-6 border">
+    <Card>
       <Label className="text-lg font-semibold mb-6">기본 정보</Label>
 
       <div className="flex gap-8 items-start">
@@ -110,13 +111,13 @@ export default function BasicSection({ form }: Props) {
                 <>
                   <FormLabel
                     className={cn(
-                      "border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer w-full min-w-sm aspect-[16/9] dark:bg-input/30",
+                      "border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer w-full min-w-sm aspect-[16/9] bg-background dark:bg-input/30",
                       form.formState.errors.thumbnail && "border-destructive"
                     )}
                   >
                     <Upload className="w-8 h-8 text-muted-foreground" />
                   </FormLabel>
-                  <ul className="text-xs text-muted-foreground font-medium space-y-1">
+                  <ul className="text-xs text-muted-foreground font-medium space-y-1 mt-2">
                     <li>16:9 비율의 이미지가 가장 알맞게 표기돼요.</li>
                     <li>
                       챌린지를 가장 잘 설명할 수 있는 이미지로 업로드 해주세요.
@@ -356,6 +357,6 @@ export default function BasicSection({ form }: Props) {
           </FormItem>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

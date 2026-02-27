@@ -9,8 +9,8 @@ import { useForm } from "react-hook-form";
 import { createChallengeParams } from "@/app/(private)/challenge-list/_action/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import z from "zod";
-import { useEffect } from "react";
 
 export default function ChallengeCreateForm() {
   const { execute, isExecuting } = useAction(challengeCreateAction);
@@ -23,7 +23,7 @@ export default function ChallengeCreateForm() {
       endDate: "",
       description: "",
       hashtags: [],
-      rejoinable: false,
+      rejoinable: true,
       isMidPoint: false,
       participationPoint: 0,
       completionPoint: 0,
@@ -36,28 +36,28 @@ export default function ChallengeCreateForm() {
     execute(form.getValues());
   }
 
-  useEffect(() => {
-    console.log("ERRORS", form.formState.errors);
-    console.log(form.getValues());
-  }, [form.formState.errors]);
-
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="space-y-10 max-w-screen-lg">
-          <BasicSection form={form} />
+    <Tabs defaultValue="add">
+      <TabsList>
+        <TabsTrigger value="add">추가</TabsTrigger>
+      </TabsList>
 
-          <ConditionSettingSection />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <TabsContent value="add">
+            <div className="space-y-10 max-w-screen-lg pt-4">
+              <BasicSection form={form} />
+              <ConditionSettingSection />
+              <CertSettingSection form={form} />
+              <WarningSettingSection form={form} />
 
-          <CertSettingSection form={form} />
-
-          <WarningSettingSection form={form} />
-
-          <Button type="submit" disabled={isExecuting}>
-            등록하기
-          </Button>
-        </div>
-      </form>
-    </Form>
+              <Button type="submit" disabled={isExecuting}>
+                등록하기
+              </Button>
+            </div>
+          </TabsContent>
+        </form>
+      </Form>
+    </Tabs>
   );
 }
