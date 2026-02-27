@@ -354,7 +354,7 @@ export default function ConditionSettingSection({ form }: Props) {
                     <Input
                       ref={ref}
                       type="number"
-                      placeholder="최대 1,000명까지 입력 가능해요"
+                      placeholder="숫자만 입력 가능해요"
                       value={value ?? ""}
                       onBlur={onBlur}
                       onChange={(e) =>
@@ -369,7 +369,7 @@ export default function ConditionSettingSection({ form }: Props) {
                   </div>
                 </FormControl>
                 <p className="text-xs text-muted-foreground">
-                  입력 시 선착순 챌린지로 변경돼요.
+                  입력 시 선착순 챌린지로 변경돼요.(최대 1000명)
                 </p>
               </FormItem>
             )}
