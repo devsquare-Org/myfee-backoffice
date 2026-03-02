@@ -4,7 +4,6 @@ import { BannerListResponse } from "@/app/(private)/banner/_action/type";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -34,6 +33,7 @@ import { Flag } from "lucide-react";
 import { AlertTitle } from "@/components/ui/alert";
 import { useAction } from "next-safe-action/hooks";
 import { AnimatePresence, motion } from "framer-motion";
+import { CustomAlert } from "@/components/custom-alert";
 
 type BannerListProps = {
   bannerList: BannerListResponse;
@@ -152,42 +152,39 @@ export default function BannerList({ bannerList }: BannerListProps) {
         )}
       </AnimatePresence>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <Table className="text-xs">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-10">순서</TableHead>
-              <TableHead>이미지</TableHead>
-              <TableHead>제목</TableHead>
-              <TableHead>링크</TableHead>
-              <TableHead>등록일</TableHead>
-              <TableHead>수정일</TableHead>
-              <TableHead className="sr-only">Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {items.length === 0 && (
+      {items.length === 0 ? (
+        <CustomAlert type="simple" title="배너가 없습니다." />
+      ) : (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <Table className="text-xs">
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={6} className="text-center">
-                  배너가 없습니다.
-                </TableCell>
+                <TableHead className="w-10">순서</TableHead>
+                <TableHead>이미지</TableHead>
+                <TableHead>제목</TableHead>
+                <TableHead>링크</TableHead>
+                <TableHead>등록일</TableHead>
+                <TableHead>수정일</TableHead>
+                <TableHead className="sr-only">Action</TableHead>
               </TableRow>
-            )}
-            <SortableContext
-              items={items.map((item) => item.bannerId)}
-              strategy={verticalListSortingStrategy}
-            >
-              {items.map((banner) => (
-                <SortableRow key={banner.bannerId} banner={banner} />
-              ))}
-            </SortableContext>
-          </TableBody>
-        </Table>
-      </DndContext>
+            </TableHeader>
+            <TableBody>
+              <SortableContext
+                items={items.map((item) => item.bannerId)}
+                strategy={verticalListSortingStrategy}
+              >
+                {items.map((banner) => (
+                  <SortableRow key={banner.bannerId} banner={banner} />
+                ))}
+              </SortableContext>
+            </TableBody>
+          </Table>
+        </DndContext>
+      )}
     </div>
   );
 }
