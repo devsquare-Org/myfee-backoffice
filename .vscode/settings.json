@@ -3,6 +3,7 @@
   "workbench.colorTheme": "GitHub Dark Colorblind (Beta)",
   "workbench.tree.indent": 15,
   "workbench.tree.renderIndentGuides": "always",
+  "editor.fontSize": 15,
   "workbench.colorCustomizations": {
     "tree.indentGuidesStroke": "#05ef3c",
     "editorIndentGuide.activeBackground": "#05ef3c"
@@ -35,14 +36,5 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "typescript.preferences.importModuleSpecifier": "non-relative",
-  "typescript.tsserver.log": "verbose",
-  "editor.quickSuggestions": {
-    "other": "on",
-    "comments": "off",
-    "strings": "off"
-  },
-  "editor.suggestOnTriggerCharacters": true,
-  "typescript.suggest.enabled": true,
-  "typescript.suggest.autoImports": true
+  "typescript.preferences.importModuleSpecifier": "non-relative"
 }

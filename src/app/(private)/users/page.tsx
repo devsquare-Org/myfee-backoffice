@@ -1,5 +1,4 @@
-import { fetchUserList } from "@/app/(private)/users/_action/data";
-import { UserList } from "@/app/(private)/users/_components/user-list";
+import { UserListWithData } from "@/app/(private)/users/_components/user-list-with-data";
 import CustomLoading from "@/components/custom-loading";
 import { PageHeader } from "@/components/page-header";
 import SearchInput from "@/components/search-input";
@@ -20,10 +19,6 @@ export default async function Page({ searchParams }: Props) {
   const params = await searchParams;
 
   if (!params.page) {
-    const today = new Date();
-    const thirtyDaysAgo = new Date(today);
-    thirtyDaysAgo.setDate(today.getDate() - 30);
-
     const page = params.page ?? "0";
     const search = params.search ?? "";
 
@@ -35,7 +30,6 @@ export default async function Page({ searchParams }: Props) {
   }
 
   const { page, search } = params;
-  const { data } = await fetchUserList({ page, search });
 
   return (
     <div>
@@ -52,12 +46,7 @@ export default async function Page({ searchParams }: Props) {
       </Suspense>
 
       <Suspense fallback={<CustomLoading />}>
-        <UserList
-          userListData={data}
-          search={search}
-          page={Number(page)}
-          isPaging={true}
-        />
+        <UserListWithData page={page} search={search} />
       </Suspense>
     </div>
   );

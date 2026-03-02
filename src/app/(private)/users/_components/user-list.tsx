@@ -1,3 +1,5 @@
+"use client";
+
 import { UserListResponse } from "@/app/(private)/users/_action/type";
 import { PaginationControls } from "@/components/pagination-controls";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
