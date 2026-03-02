@@ -124,6 +124,16 @@ export function DateRangePicker({
     setOpen(newOpen);
   }
 
+  const today = new Date();
+  const thirtyDaysAgo = subDays(today, 30);
+  const isRecent30Days =
+    dateRange?.from &&
+    dateRange?.to &&
+    format(dateRange.from, "yyyy-MM-dd") ===
+      format(thirtyDaysAgo, "yyyy-MM-dd") &&
+    format(dateRange.to, "yyyy-MM-dd") === format(today, "yyyy-MM-dd");
+  const showResetButton = (dateRange?.from || dateRange?.to) && !isRecent30Days;
+
   return (
     <div className={cn(className)}>
       <div className="flex items-center gap-2">
@@ -175,14 +185,14 @@ export function DateRangePicker({
                   <div className="text-xs text-muted-foreground">
                     {tempDateRange?.from && tempDateRange?.to
                       ? `${format(tempDateRange.from, "yyyy.MM.dd", {
-                        locale: ko,
-                      })} - ${format(tempDateRange.to, "yyyy.MM.dd", {
-                        locale: ko,
-                      })}`
+                          locale: ko,
+                        })} - ${format(tempDateRange.to, "yyyy.MM.dd", {
+                          locale: ko,
+                        })}`
                       : tempDateRange?.from
                         ? `${format(tempDateRange.from, "yyyy.MM.dd", {
-                          locale: ko,
-                        })} - 종료일 선택`
+                            locale: ko,
+                          })} - 종료일 선택`
                         : "날짜를 선택하세요"}
                   </div>
                   {tempDateRange?.from && (
@@ -221,7 +231,7 @@ export function DateRangePicker({
             </div>
           </PopoverContent>
         </Popover>
-        {(dateRange?.from || dateRange?.to) && (
+        {showResetButton && (
           <Button
             className="h-9 shadow-none"
             variant="outline"
