@@ -6,7 +6,7 @@ import { DateRangePicker } from "@/components/date-range-picker";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { redirect } from "next/navigation";
-import { formatLocalDate } from "@/lib/utils";
+import { formatKSTDate } from "@/lib/utils";
 import CustomLoading from "@/components/custom-loading";
 
 type Props = {
@@ -27,8 +27,8 @@ export default async function Notification({ searchParams }: Props) {
 
     const queryString = new URLSearchParams();
     queryString.set("page", page ?? "0");
-    queryString.set("startDate", startDate ?? formatLocalDate(thirtyDaysAgo));
-    queryString.set("endDate", endDate ?? formatLocalDate(today));
+    queryString.set("startDate", startDate ?? formatKSTDate(thirtyDaysAgo));
+    queryString.set("endDate", endDate ?? formatKSTDate(today));
     redirect(`/notification?${queryString.toString()}`);
   }
 

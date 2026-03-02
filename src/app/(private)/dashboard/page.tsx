@@ -2,7 +2,7 @@ import { PageHeader } from "@/components/page-header";
 import { Suspense } from "react";
 import { Dashboard } from "@/app/(private)/dashboard/_components/dashboard";
 import { redirect } from "next/navigation";
-import { formatLocalDate } from "@/lib/utils";
+import { formatKSTDate } from "@/lib/utils";
 import CustomLoading from "@/components/custom-loading";
 
 type Props = {
@@ -20,8 +20,8 @@ export default async function Page({ searchParams }: Props) {
     const thirtyDaysAgo = new Date(today);
     thirtyDaysAgo.setDate(today.getDate() - 30);
 
-    const endDate = params.endDate ?? formatLocalDate(today);
-    const startDate = params.startDate ?? formatLocalDate(thirtyDaysAgo);
+    const endDate = params.endDate ?? formatKSTDate(today);
+    const startDate = params.startDate ?? formatKSTDate(thirtyDaysAgo);
 
     const queryString = new URLSearchParams();
     queryString.set("startDate", startDate);
