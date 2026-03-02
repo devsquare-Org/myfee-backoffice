@@ -56,6 +56,10 @@ export const createChallengeParams = z
     maxParticipants: z
       .number()
       .max(1000, "최대 참여자 수는 1000명을 초과할 수 없습니다.")
+      // 최소 참여자는 2명 이상이어야 함.
+      .refine((value) => value !== undefined && value >= 2, {
+        message: "최소 참여자 수는 2명 이상이어야 합니다.",
+      })
       .optional(),
 
     // 재참여 가능 여부

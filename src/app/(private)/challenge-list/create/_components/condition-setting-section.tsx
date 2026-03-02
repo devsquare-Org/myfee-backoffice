@@ -361,6 +361,7 @@ export default function ConditionSettingSection({ form }: Props) {
                           e.target.value ? Number(e.target.value) : undefined
                         )
                       }
+                      aria-invalid={!!form.formState.errors.maxParticipants}
                     />
                     <span className="text-sm text-muted-foreground shrink-0">
                       명
