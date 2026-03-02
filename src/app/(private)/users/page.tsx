@@ -1,5 +1,6 @@
 import { fetchUserList } from "@/app/(private)/users/_action/data";
 import { UserList } from "@/app/(private)/users/_components/user-list";
+import CustomLoading from "@/components/custom-loading";
 import { PageHeader } from "@/components/page-header";
 import SearchInput from "@/components/search-input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -49,12 +50,15 @@ export default async function Page({ searchParams }: Props) {
           className="mb-4 max-w-[280px]"
         />
       </Suspense>
-      <UserList
-        userListData={data}
-        search={search}
-        page={Number(page)}
-        isPaging={true}
-      />
+
+      <Suspense fallback={<CustomLoading />}>
+        <UserList
+          userListData={data}
+          search={search}
+          page={Number(page)}
+          isPaging={true}
+        />
+      </Suspense>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import { PageHeader } from "@/components/page-header";
-import NotificationHistory from "@/app/(private)/notification/_components/notification-history";
-import { fetchNotificationHistory } from "@/app/(private)/notification/_action/data";
+import { NotificationHistoryWithData } from "@/app/(private)/notification/_components/notification-history-with-data";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { DateRangePicker } from "@/components/date-range-picker";
@@ -8,6 +7,7 @@ import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { redirect } from "next/navigation";
 import { formatLocalDate } from "@/lib/utils";
+import CustomLoading from "@/components/custom-loading";
 
 type Props = {
   searchParams: Promise<{
@@ -32,12 +32,6 @@ export default async function Notification({ searchParams }: Props) {
     redirect(`/notification?${queryString.toString()}`);
   }
 
-  const { data } = await fetchNotificationHistory({
-    startDate,
-    endDate,
-    page,
-  });
-
   return (
     <div>
       <PageHeader
@@ -53,11 +47,13 @@ export default async function Notification({ searchParams }: Props) {
         <DateRangePicker placeholder="기간을 선택하세요" className="mb-4" />
       </Suspense>
 
-      <NotificationHistory
-        notificationHistory={data}
-        startDate={startDate}
-        endDate={endDate}
-      />
+      <Suspense fallback={<CustomLoading />}>
+        <NotificationHistoryWithData
+          startDate={startDate}
+          endDate={endDate}
+          page={page}
+        />
+      </Suspense>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { DateRangePicker } from "@/components/date-range-picker";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import StatusSelector from "@/app/(private)/challenge-review/_components/status-selector";
+import CustomLoading from "@/components/custom-loading";
 
 export default function ChallengeReview() {
   return (
@@ -20,7 +21,7 @@ export default function ChallengeReview() {
         </div>
       </Suspense>
 
-      <Suspense fallback={<Skeleton className="w-full flex-1 mb-4" />}>
+      <Suspense fallback={<CustomLoading />}>
         <ChallengeReviewContainer />
       </Suspense>
     </div>
