@@ -13,7 +13,7 @@ const cookieOptions = {
   path: "/",
 };
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const accessToken = request.cookies.get("__myfee_admin_accessToken")?.value;
   const refreshToken = request.cookies.get("__myfee_admin_refreshToken")?.value;
