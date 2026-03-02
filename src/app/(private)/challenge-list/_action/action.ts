@@ -5,6 +5,7 @@ import { actionClient } from "@/lib/safe-action";
 import { myfeeFormData } from "@/lib/myfee-client";
 import type { z } from "zod";
 import { returnSchema } from "@/app/signin/_action/schema";
+import { revalidatePath } from "next/cache";
 
 type CreateChallengeInput = z.infer<typeof createChallengeParams>;
 
@@ -69,13 +70,13 @@ export const challengeCreateAction = actionClient
     formData.append("thumbnailFile", parsedInput.thumbnail);
     formData.append("certificationGuideFile", parsedInput.certImage);
 
-    console.log("FORM DATA", formData);
-
     await myfeeFormData({
       endpoint: "/api/admin/challenges",
       body: formData,
       requiresAuth: true,
     });
+
+    revalidatePath("/challenge-list");
 
     return {
       status: "SUCCESS",

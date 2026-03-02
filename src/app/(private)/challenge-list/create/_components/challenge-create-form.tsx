@@ -13,9 +13,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import z from "zod";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/routes-config";
 
 export default function ChallengeCreateForm() {
-  const { execute, isExecuting } = useAction(challengeCreateAction);
+  const router = useRouter();
+  const { execute, isExecuting } = useAction(challengeCreateAction, {
+    onSuccess: ({ data }) => {
+      toast.success(data.message);
+      form.reset();
+      router.push(ROUTES.CHALLENGE_LIST);
+    },
+    onError: ({ error: { serverError } }) => {
+      toast.error(serverError?.message);
+    },
+  });
 
   const form = useForm<z.infer<typeof createChallengeParams>>({
     resolver: zodResolver(createChallengeParams),
