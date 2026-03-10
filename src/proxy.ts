@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const PUBLIC_ROUTES = ["/signin", "/shopby-test"];
-const TOKEN_REFRESH_BUFFER_SECONDS = 5 * 60;
+const TOKEN_REFRESH_BUFFER_SECONDS = 0;
 
 const cookieOptions = {
   httpOnly: true,
@@ -29,6 +29,9 @@ export async function proxy(request: NextRequest) {
 
   // 토큰 없이 프라이빗 경로 접근 → 로그인으로
   if (!accessToken && !isPublicRoute) {
+    if (request.headers.get("next-action")) {
+      return NextResponse.next();
+    }
     return NextResponse.redirect(new URL("/signin", request.url));
   }
 
@@ -71,30 +74,42 @@ export async function proxy(request: NextRequest) {
     );
 
     if (expiresInSeconds < TOKEN_REFRESH_BUFFER_SECONDS) {
-      const tokens = await tokenManager.refreshMyfeeAccessToken({
-        refreshToken,
-      });
+      try {
+        const tokens = await tokenManager.refreshMyfeeAccessToken({
+          refreshToken,
+        });
 
-      if (tokens) {
-        const response = NextResponse.next();
-        response.cookies.set(
-          "__myfee_admin_accessToken",
-          tokens.accessToken,
-          cookieOptions
-        );
-        response.cookies.set(
-          "__myfee_admin_refreshToken",
-          tokens.refreshToken,
-          cookieOptions
-        );
+        if (tokens) {
+          const response = NextResponse.next();
+          response.cookies.set(
+            "__myfee_admin_accessToken",
+            tokens.accessToken,
+            cookieOptions
+          );
+          response.cookies.set(
+            "__myfee_admin_refreshToken",
+            tokens.refreshToken,
+            cookieOptions
+          );
+          return response;
+        }
+      } catch (error) {
+        const isServerAction = !!request.headers.get("next-action");
+
+        if (isServerAction) {
+          const response = NextResponse.next();
+          response.cookies.delete("__myfee_admin_accessToken");
+          response.cookies.delete("__myfee_admin_refreshToken");
+          return response;
+        }
+
+        // 갱신 실패 → 쿠키 제거 후 로그인 페이지로
+        const response = NextResponse.redirect(new URL("/signin", request.url));
+        response.cookies.delete("__myfee_admin_accessToken");
+        response.cookies.delete("__myfee_admin_refreshToken");
+
         return response;
       }
-
-      // 갱신 실패 → 쿠키 제거 후 로그인 페이지로
-      const response = NextResponse.redirect(new URL("/signin", request.url));
-      response.cookies.delete("__myfee_admin_accessToken");
-      response.cookies.delete("__myfee_admin_refreshToken");
-      return response;
     }
   }
 

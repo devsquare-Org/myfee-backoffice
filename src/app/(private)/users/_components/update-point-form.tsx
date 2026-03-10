@@ -37,8 +37,8 @@ export default function UpdatePointForm({ className, userId }: Props) {
       form.reset();
       setIsSubmit(false);
     },
-    onError: ({ error: { serverError } }) => {
-      toast.error(serverError?.message);
+    onError: ({ error }) => {
+      toast.error(error.serverError?.message);
     },
   });
 
