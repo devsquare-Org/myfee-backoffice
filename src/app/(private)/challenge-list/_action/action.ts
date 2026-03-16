@@ -31,6 +31,8 @@ function mapFormToApiRequest(input: CreateChallengeInput) {
 
   if (input.isMidPoint && input.midPoint != null) {
     request.midPoint = input.midPoint;
+  } else {
+    request.midPoint = 0;
   }
 
   if (isTerm) {
@@ -40,6 +42,9 @@ function mapFormToApiRequest(input: CreateChallengeInput) {
     if (input.isMidPoint) {
       request.midPointPeriodDuration = input.termsOfPayment ?? 0;
       request.midPointRequiredSatisfactionCount = input.termsNumOfSuccess ?? 0;
+    } else {
+      request.midPointPeriodDuration = 0;
+      request.midPointRequiredSatisfactionCount = 0;
     }
   } else {
     request.term = input.weeklyChallengePeriod ?? 0;
@@ -48,6 +53,8 @@ function mapFormToApiRequest(input: CreateChallengeInput) {
     request.dailyCertificationCount = input.dailyNumOfCert ?? 1;
     if (input.isMidPoint && input.weeklyNumOfCompleted != null) {
       request.midPointRequiredSatisfactionCount = input.weeklyNumOfCompleted;
+    } else {
+      request.midPointRequiredSatisfactionCount = 0;
     }
   }
 
