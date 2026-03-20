@@ -35,12 +35,14 @@ export default async function ChallengeList() {
             {challengeList.map((challenge) => (
               <TableRow key={challenge.challengeId}>
                 <TableCell>{challenge.title}</TableCell>
-                <TableCell>{challenge.content}</TableCell>
+                <TableCell>{challenge.content.slice(0, 20)}...</TableCell>
                 <TableCell>{getChallengeType(challenge.type)}</TableCell>
                 <TableCell>
                   {challenge.participationPoint.toLocaleString()}P
                 </TableCell>
-                <TableCell>{challenge.midPoint?.toLocaleString()}P</TableCell>
+                <TableCell>
+                  {challenge.midPoint?.toLocaleString() ?? "0"}P
+                </TableCell>
                 <TableCell>
                   {challenge.completionPoint.toLocaleString()}P
                 </TableCell>
