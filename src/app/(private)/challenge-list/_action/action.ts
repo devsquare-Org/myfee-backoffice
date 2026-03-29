@@ -52,6 +52,7 @@ function mapFormToApiRequest(input: CreateChallengeInput) {
       (input.weeklyNumOfDays ?? 0) * (input.weeklyChallengePeriod ?? 0);
     request.dailyCertificationCount = input.dailyNumOfCert ?? 1;
     if (input.isMidPoint && input.weeklyNumOfCompleted != null) {
+      request.midPointPeriodDuration = input.weeklyNumOfCompleted;
       request.midPointRequiredSatisfactionCount = input.weeklyNumOfCompleted;
     } else {
       request.midPointPeriodDuration = 0;
