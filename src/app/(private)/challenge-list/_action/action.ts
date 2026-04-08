@@ -20,7 +20,7 @@ function mapFormToApiRequest(input: CreateChallengeInput) {
     hashtags: input.hashtags,
     type: input.type,
     rejoinAllowYn: input.rejoinable ? "Y" : "N",
-    participationPoint: input.participationPoint,
+    participationPoint: input.participationPoint ?? 0,
     completionPoint: input.completionPoint,
     midPointYn: input.isMidPoint ? "Y" : "N",
     participantLimitYn: input.maxParticipants != null ? "Y" : "N",

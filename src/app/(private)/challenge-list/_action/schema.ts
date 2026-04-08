@@ -66,7 +66,7 @@ export const createChallengeParams = z
     rejoinable: z.boolean({ message: "재참여 가능 여부를 선택해주세요." }),
 
     // 참여 포인트
-    participationPoint: z.number().min(1, "참여 포인트를 입력해주세요."),
+    participationPoint: z.number().min(0, "참여 포인트를 입력해주세요."),
 
     // 중간포인트 지급 여부
     isMidPoint: z.boolean({

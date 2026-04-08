@@ -47,7 +47,7 @@ export default function ChallengeCreateForm() {
       dailyNumOfCert: 1,
       rejoinable: true,
       isMidPoint: false,
-      participationPoint: 0,
+      participationPoint: undefined,
       completionPoint: 0,
       warnings: [],
     },

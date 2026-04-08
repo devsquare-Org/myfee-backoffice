@@ -429,11 +429,13 @@ export default function ConditionSettingSection({ form }: Props) {
                       type="number"
                       min={0}
                       placeholder="숫자만 입력 가능해요."
-                      value={value === 0 ? "" : (value ?? "")}
+                      value={value ?? ""}
                       onBlur={onBlur}
                       onChange={(e) =>
                         onChange(
-                          e.target.value === "" ? 0 : Number(e.target.value)
+                          e.target.value === ""
+                            ? undefined
+                            : Number(e.target.value)
                         )
                       }
                       aria-invalid={!!form.formState.errors.participationPoint}
