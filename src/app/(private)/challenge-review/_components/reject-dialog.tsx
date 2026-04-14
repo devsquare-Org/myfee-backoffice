@@ -142,7 +142,10 @@ export function RejectDialog({
                         className="w-full"
                       />
                     ) : (
-                      <Select onValueChange={field.onChange}>
+                      <Select
+                        value={field.value || undefined}
+                        onValueChange={field.onChange}
+                      >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="사유 선택" />
                         </SelectTrigger>
@@ -150,7 +153,7 @@ export function RejectDialog({
                           {REJECT_REASON.map((item) => (
                             <SelectItem
                               key={item.value}
-                              value={item.value}
+                              value={item.label}
                               className="cursor-pointer"
                             >
                               {item.label}
