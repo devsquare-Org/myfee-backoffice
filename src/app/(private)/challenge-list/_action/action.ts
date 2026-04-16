@@ -48,8 +48,7 @@ function mapFormToApiRequest(input: CreateChallengeInput) {
     }
   } else {
     request.term = input.weeklyChallengePeriod ?? 0;
-    request.requiredCertificationCount =
-      (input.weeklyNumOfDays ?? 0) * (input.weeklyChallengePeriod ?? 0);
+    request.requiredCertificationCount = input.weeklyNumOfDays ?? 0;
     request.dailyCertificationCount = input.dailyNumOfCert ?? 1;
     if (input.isMidPoint && input.weeklyNumOfCompleted != null) {
       request.midPointPeriodDuration = input.weeklyNumOfCompleted;
@@ -69,6 +68,8 @@ export const challengeCreateAction = actionClient
   .action(async ({ parsedInput }) => {
     const request = mapFormToApiRequest(parsedInput);
 
+    console.log("request", request);
+
     const formData = new FormData();
 
     const requestBlob = new Blob([JSON.stringify(request)], {
@@ -79,11 +80,11 @@ export const challengeCreateAction = actionClient
     formData.append("thumbnailFile", parsedInput.thumbnail);
     formData.append("certificationGuideFile", parsedInput.certImage);
 
-    await myfeeFormData({
-      endpoint: "/api/admin/challenges",
-      body: formData,
-      requiresAuth: true,
-    });
+    // await myfeeFormData({
+    //   endpoint: "/api/admin/challenges",
+    //   body: formData,
+    //   requiresAuth: true,
+    // });
 
     revalidatePath("/challenge-list");
 
