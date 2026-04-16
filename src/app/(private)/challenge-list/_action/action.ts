@@ -80,11 +80,11 @@ export const challengeCreateAction = actionClient
     formData.append("thumbnailFile", parsedInput.thumbnail);
     formData.append("certificationGuideFile", parsedInput.certImage);
 
-    // await myfeeFormData({
-    //   endpoint: "/api/admin/challenges",
-    //   body: formData,
-    //   requiresAuth: true,
-    // });
+    await myfeeFormData({
+      endpoint: "/api/admin/challenges",
+      body: formData,
+      requiresAuth: true,
+    });
 
     revalidatePath("/challenge-list");
 
