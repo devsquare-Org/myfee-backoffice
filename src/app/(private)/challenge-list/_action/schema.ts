@@ -2,6 +2,45 @@ import { compareAsc } from "date-fns";
 import * as z from "zod";
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
+export const getChallengeDetailParams = z.object({
+  id: z.string(),
+});
+
+export const updateChallengeParams = z.object({
+  id: z.string(),
+  title: z
+    .string()
+    .min(1, "제목을 1글자 이상 입력해주세요.")
+    .max(20, "제목을 20글자 이하로 입력해주세요."),
+  content: z
+    .string()
+    .min(1, "설명을 입력해주세요.")
+    .max(200, "설명은 200자 이하로 입력해주세요."),
+  thumbnailUrl: z.string().min(1, "썸네일이 필요합니다."),
+  thumbnailFile: z
+    .instanceof(File)
+    .optional()
+    .refine((file) => !file || file.size <= MAX_FILE_SIZE, {
+      message: "썸네일 크기는 10MB 이하여야 합니다.",
+    })
+    .refine((file) => !file || file.type.startsWith("image/"), {
+      message: "썸네일은 이미지 파일만 업로드 가능합니다.",
+    }),
+  linkUrl: z.string(),
+  certificationGuideUrl: z.string(),
+  hashtags: z
+    .array(
+      z.object({
+        name: z
+          .string()
+          .min(1, "해시태그를 입력해주세요.")
+          .max(20, "해시태그는 20자 이하로 입력해주세요."),
+      })
+    )
+    .min(1, "해시태그를 입력해주세요.")
+    .max(5, "해시태그는 최대 5개까지만 등록 가능합니다."),
+});
+
 export const createChallengeParams = z
   .object({
     // 썸네일

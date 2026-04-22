@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { fetchChallengeList } from "@/app/(private)/challenge-list/_action/data";
+import { ROUTES } from "@/lib/routes-config";
 
 export default async function ChallengeList() {
   const { data: challengeList } = await fetchChallengeList();
@@ -21,7 +22,6 @@ export default async function ChallengeList() {
           <TableHeader>
             <TableRow className="font-semibold">
               <TableHead>챌린지명</TableHead>
-              <TableHead>내용</TableHead>
               <TableHead>타입</TableHead>
               <TableHead>참여 포인트</TableHead>
               <TableHead>중간 포인트</TableHead>
@@ -33,9 +33,11 @@ export default async function ChallengeList() {
           </TableHeader>
           <TableBody>
             {challengeList.map((challenge) => (
-              <TableRow key={challenge.challengeId}>
+              <TableRow
+                key={challenge.challengeId}
+                url={`${ROUTES.CHALLENGE_LIST}/${challenge.challengeId}`}
+              >
                 <TableCell>{challenge.title}</TableCell>
-                <TableCell>{challenge.content.slice(0, 20)}...</TableCell>
                 <TableCell>{getChallengeType(challenge.type)}</TableCell>
                 <TableCell>
                   {challenge.participationPoint.toLocaleString()}P

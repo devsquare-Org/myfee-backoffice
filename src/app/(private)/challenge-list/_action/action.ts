@@ -1,8 +1,11 @@
 "use server";
 
-import { createChallengeParams } from "@/app/(private)/challenge-list/_action/schema";
+import {
+  createChallengeParams,
+  updateChallengeParams,
+} from "@/app/(private)/challenge-list/_action/schema";
 import { actionClient } from "@/lib/safe-action";
-import { myfeeFormData } from "@/lib/myfee-client";
+import { myfeeFormData, myfeePut } from "@/lib/myfee-client";
 import type { z } from "zod";
 import { returnSchema } from "@/app/signin/_action/schema";
 import { revalidatePath } from "next/cache";
@@ -91,5 +94,46 @@ export const challengeCreateAction = actionClient
     return {
       status: "SUCCESS",
       message: "챌린지를 등록했습니다.",
+    };
+  });
+
+export const challengeUpdateAction = actionClient
+  .inputSchema(updateChallengeParams)
+  .action(async ({ parsedInput }) => {
+    let thumbnailUrl = parsedInput.thumbnailUrl;
+
+    // 새 썸네일이 있으면 먼저 미디어 업로드 후 URL을 교체
+    if (parsedInput.thumbnailFile) {
+      const mediaFormData = new FormData();
+      mediaFormData.append("file", parsedInput.thumbnailFile);
+
+      const mediaRes = (await myfeeFormData({
+        endpoint: "/api/admin/challenges/media",
+        body: mediaFormData,
+        requiresAuth: true,
+      })) as { newFileUrl: string };
+
+      thumbnailUrl = mediaRes.newFileUrl;
+    }
+
+    await myfeePut({
+      endpoint: `/api/admin/challenges/${parsedInput.id}`,
+      requiresAuth: true,
+      body: {
+        title: parsedInput.title,
+        content: parsedInput.content,
+        linkUrl: parsedInput.linkUrl,
+        thumbnailUrl,
+        certificationGuideUrl: parsedInput.certificationGuideUrl,
+        hashtags: parsedInput.hashtags,
+      },
+    });
+
+    revalidatePath("/challenge-list");
+    revalidatePath(`/challenge-list/${parsedInput.id}`);
+
+    return {
+      thumbnailUrl,
+      message: "챌린지를 수정했습니다.",
     };
   });

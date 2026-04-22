@@ -1,7 +1,12 @@
 "use server";
 
-import { ChallengeListResponse } from "@/app/(private)/challenge-list/_action/type";
+import {
+  ChallengeDetailResponse,
+  ChallengeListResponse,
+} from "@/app/(private)/challenge-list/_action/type";
+import { getChallengeDetailParams } from "@/app/(private)/challenge-list/_action/schema";
 import { myfeeFetch } from "@/lib/myfee-client";
+import z from "zod";
 
 type ListItem = Omit<
   ChallengeListResponse[number],
@@ -42,5 +47,22 @@ export async function fetchChallengeList(): Promise<{
   return {
     data: challengeList,
     message: "챌린지 목록을 성공적으로 조회하였습니다.",
+  };
+}
+
+export async function getChallengeDetail(
+  params: z.infer<typeof getChallengeDetailParams>
+): Promise<{
+  data: ChallengeDetailResponse;
+  message: string;
+}> {
+  const res = (await myfeeFetch({
+    endpoint: `/api/admin/challenges/${params.id}`,
+    requiresAuth: true,
+  })) as ChallengeDetailResponse;
+
+  return {
+    data: res,
+    message: "챌린지 상세 정보를 성공적으로 조회하였습니다.",
   };
 }
